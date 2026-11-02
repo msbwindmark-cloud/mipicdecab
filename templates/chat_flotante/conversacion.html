@@ -7,7 +7,7 @@
 <div class="card mb-4">
     <div class="card-body" style="height: 400px; overflow-y: auto;">
         {% for m in mensajes %}
-        <div class="mb-3 {% if m.autor == 'PICADERO' %text-end{% endif %}">
+        <div class="mb-3 {% if m.autor == 'PICADERO' %}text-end{% endif %}">
             <div class="d-inline-block p-2 rounded {% if m.autor == 'PICADERO' %}bg-primary text-white{% else %}bg-light{% endif %}" style="max-width: 70%;">
                 <div>{{ m.contenido }}</div>
                 <small class="text-muted">{{ m.fecha }}</small>

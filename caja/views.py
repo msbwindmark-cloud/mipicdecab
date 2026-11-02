@@ -1,14 +1,27 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Sum, Q
+from django.core.paginator import Paginator
 from django.utils import timezone
 from .models import MovimientoCaja
 
 
 @login_required
 def caja_list(request):
+    query = request.GET.get('q', '')
     movimientos = MovimientoCaja.objects.all().order_by('-fecha')
-    return render(request, 'caja/list.html', {'movimientos': movimientos})
+    if query:
+        movimientos = movimientos.filter(
+            Q(concepto__icontains=query) |
+            Q(categoria__icontains=query) |
+            Q(forma_pago__icontains=query)
+        )
+    paginator = Paginator(movimientos, request.GET.get('per_page', 5))
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    if request.htmx:
+        return render(request, 'caja/_lista.html', {'page_obj': page_obj, 'query': query})
+    return render(request, 'caja/list.html', {'page_obj': page_obj, 'query': query})
 
 
 @login_required

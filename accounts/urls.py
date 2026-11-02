@@ -8,4 +8,5 @@ urlpatterns = [
     path('verify-2fa/', views.verify_2fa, name='verify_2fa'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('profile/', views.profile, name='profile'),
+    path('enviar-recordatorios/', views.enviar_recordatorios_view, name='enviar_recordatorios'),
 ]

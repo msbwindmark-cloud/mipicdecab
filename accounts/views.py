@@ -9,6 +9,11 @@ import random
 
 from .forms import EmailAuthenticationForm, TwoFactorForm, RegistrationForm
 from .models import TwoFactorCode
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
+from caballos.models import ControlHerraje, ControlVeterinario
 from .utils import send_2fa_email
 
 
@@ -89,6 +94,69 @@ def verify_2fa(request):
         form = TwoFactorForm()
     
     return render(request, 'accounts/verify_2fa.html', {'form': form, 'user': user})
+
+
+@login_required
+def enviar_recordatorios_view(request):
+    if request.method != 'POST':
+        return redirect('dashboard')
+    today = timezone.now().date()
+    days_ahead = 7
+    enviados = 0
+    # Herrajes
+    herrajes = ControlHerraje.objects.filter(
+        proximo_herraje__gte=today,
+        proximo_herraje__lte=today + timedelta(days=days_ahead)
+    ).select_related('caballo', 'caballo__propietario')
+    for h in herrajes:
+        try:
+            subject = f'Recordatorio: Herraje próximo - {h.caballo.nombre}'
+            message = f'''Hola {h.caballo.propietario.nombre},
+
+Te recordamos que a {h.caballo.nombre} le toca herrar el día {h.proximo_herraje}.
+
+Por favor, contacta con nosotros para confirmar cita.
+
+Saludos,
+EcuestreManager
+'''
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [h.caballo.propietario.email])
+            enviados += 1
+        except Exception:
+            pass
+    # Vacunas
+    vacunas = ControlVeterinario.objects.filter(
+        proxima_fecha__gte=today,
+        proxima_fecha__lte=today + timedelta(days=days_ahead),
+        tipo='VACUNA'
+    ).select_related('caballo', 'caballo__propietario')
+    for v in vacunas:
+        try:
+            subject = f'Recordatorio: Vacuna próxima - {v.caballo.nombre}'
+            message = f'''Hola {v.caballo.propietario.nombre},
+
+Te recordamos que {v.caballo.nombre} tiene vacunación programada para el día {v.proxima_fecha}.
+
+Por favor, contacta con nosotros para confirmar cita.
+
+Saludos,
+EcuestreManager
+'''
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [v.caballo.propietario.email])
+            enviados += 1
+        except Exception:
+            pass
+    # Email de prueba si no hubo recordatorios
+    if enviados == 0:
+        try:
+            send_mail('Prueba EcuestreManager', 'Este es un email de prueba desde tu aplicación.', settings.DEFAULT_FROM_EMAIL, [settings.DEFAULT_FROM_EMAIL])
+            enviados = 1
+            messages.info(request, 'No había recordatorios próximos. Se envió un email de prueba.')
+        except Exception:
+            messages.warning(request, 'No se pudo enviar email de prueba.')
+    else:
+        messages.success(request, f'Se enviaron {enviados} recordatorios por email.')
+    return redirect('dashboard')
 
 
 @login_required
