@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
 import random
 
-from .forms import EmailAuthenticationForm, TwoFactorForm
+from .forms import EmailAuthenticationForm, TwoFactorForm, RegistrationForm
 from .models import TwoFactorCode
 from .utils import send_2fa_email
 
@@ -19,6 +20,11 @@ def login_view(request):
         form = EmailAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
+            # En desarrollo (DEBUG=True) saltamos el 2FA para comodidad
+            if settings.DEBUG:
+                login(request, user)
+                messages.success(request, f'¡Bienvenido {user.first_name or user.username}!')
+                return redirect('dashboard')
             # Generar y enviar código 2FA
             code = str(random.randint(100000, 999999))
             TwoFactorCode.objects.create(user=user, code=code)
@@ -32,6 +38,22 @@ def login_view(request):
         form = EmailAuthenticationForm()
     
     return render(request, 'accounts/login.html', {'form': form})
+
+
+def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Cuenta creada. Ahora inicia sesión.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Revisa los datos del formulario.')
+    else:
+        form = RegistrationForm()
+    return render(request, 'accounts/register.html', {'form': form})
 
 
 def verify_2fa(request):
