@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-calculator"></i> Simulador de Negocio</h1>
+    <span class="badge bg-primary fs-6">Proyección del picadero</span>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-sliders-h"></i> Parámetros del Negocio</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <label class="form-label">Caballos activos: <strong id="val-caballos">{{ num_caballos }}</strong></label>
+                    <input type="range" class="form-range" min="0" max="64" step="1" id="caballos" value="{{ num_caballos }}" oninput="actualizar()">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Precio medio pupilaje (€/mes por caballo): <strong id="val-pup">{{ precio_pupilaje }} €</strong></label>
+                    <input type="range" class="form-range" min="0" max="1000" step="5" id="precio_pupilaje" value="{{ precio_pupilaje }}" oninput="actualizar()">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Entrenamientos / mes: <strong id="val-entren">{{ num_entrenamientos }}</strong></label>
+                    <input type="range" class="form-range" min="0" max="200" step="1" id="num_entrenamientos" value="{{ num_entrenamientos }}" oninput="actualizar()">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Precio medio entrenamiento (€/sesión): <strong id="val-precioEnt">{{ precio_entrenamiento }} €</strong></label>
+                    <input type="range" class="form-range" min="0" max="200" step="5" id="precio_entrenamiento" value="{{ precio_entrenamiento }}" oninput="actualizar()">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Costes fijos mensuales (€): <strong id="val-costes">{{ costes_fijos }} €</strong></label>
+                    <input type="range" class="form-range" min="0" max="50000" step="500" id="costes_fijos" value="{{ costes_fijos }}" oninput="actualizar()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Proyección Mensual</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center mb-3">
+                    <div class="col-6">
+                        <h3 id="out-ingresos">0 €</h3>
+                        <small>Ingresos</small>
+                    </div>
+                    <div class="col-6">
+                        <h3 id="out-gastos">0 €</h3>
+                        <small>Gastos</small>
+                    </div>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-6">
+                        <h3 id="out-beneficio">0 €</h3>
+                        <small>Beneficio</small>
+                    </div>
+                    <div class="col-6">
+                        <h3 id="out-margen">0%</h3>
+                        <small>Margen</small>
+                    </div>
+                </div>
+                <canvas id="graficoSimulador" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function actualizar() {
+    const caballos = parseInt(document.getElementById('caballos').value);
+    const pup = parseFloat(document.getElementById('precio_pupilaje').value);
+    const entren = parseInt(document.getElementById('num_entrenamientos').value);
+    const precioEnt = parseFloat(document.getElementById('precio_entrenamiento').value);
+    const costes = parseFloat(document.getElementById('costes_fijos').value);
+
+    const ingresos = (caballos * pup) + (entren * precioEnt);
+    const gastos = costes;
+    const beneficio = ingresos - gastos;
+    const margen = ingresos > 0 ? (beneficio / ingresos) * 100 : 0;
+
+    document.getElementById('val-caballos').innerText = caballos;
+    document.getElementById('val-pup').innerText = pup + ' €';
+    document.getElementById('val-entren').innerText = entren;
+    document.getElementById('val-precioEnt').innerText = precioEnt + ' €';
+    document.getElementById('val-costes').innerText = costes + ' €';
+
+    document.getElementById('out-ingresos').innerText = ingresos + ' €';
+    document.getElementById('out-gastos').innerText = gastos + ' €';
+    document.getElementById('out-beneficio').innerText = beneficio + ' €';
+    document.getElementById('out-margen').innerText = margen.toFixed(1) + '%';
+
+    if (window.miGrafico) {
+        window.miGrafico.data.datasets[0].data = [ingresos, gastos];
+        window.miGrafico.update();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('graficoSimulador');
+    if (ctx) {
+        window.miGrafico = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Ingresos', 'Gastos'],
+                datasets: [{
+                    label: 'Importe (€)',
+                    data: [{{ num_caballos }} * {{ precio_pupilaje }} + {{ num_entrenamientos }} * {{ precio_entrenamiento }}, {{ costes_fijos }}],
+                    backgroundColor: ['#198754', '#dc3545']
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+    }
+    actualizar();
+});
+</script>
+{% endblock %}

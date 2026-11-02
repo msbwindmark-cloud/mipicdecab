@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-file-alt"></i> Documentos</h1>
+    <a href="{% url 'documento_subir' %}" class="btn btn-primary"><i class="fas fa-upload"></i> Subir Documento</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <input type="text" class="form-control" name="q" placeholder="Buscar por título, tipo, caballo, propietario..." value="{{ query }}"
+               hx-get="{% url 'documento_list' %}" hx-trigger="keyup changed delay:300ms" hx-target="#lista-documentos" hx-push-url="true">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body" id="lista-documentos">
+        {% include 'documentos/_lista.html' %}
+    </div>
+</div>
+{% endblock %}

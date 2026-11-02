@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-broom"></i> Control de Limpieza</h1>
+    <a href="{% url 'registrar_limpieza' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Registrar Limpieza</a>
+</div>
+
+{% if programa %}
+<div class="card mb-4">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">Programa de Limpieza Pendiente</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Box</th>
+                        <th>Tipo</th>
+                        <th>Frecuencia</th>
+                        <th>Próxima Limpieza</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in programa %}
+                    <tr class="{% if p.vencida %}table-danger{% endif %}">
+                        <td>Box {{ p.box.numero }}</td>
+                        <td>{{ p.get_tipo_display }}</td>
+                        <td>{{ p.get_frecuencia_display }}</td>
+                        <td>{{ p.proxima_limpieza|default:"-" }}</td>
+                        <td>{% if p.vencida %}<span class="badge bg-danger">Vencida</span>{% else %}<span class="badge bg-success">OK</span>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <input type="text" class="form-control" name="q" placeholder="Buscar por box, tipo, realizado por..." value="{{ query }}"
+               hx-get="{% url 'limpieza_list' %}" hx-trigger="keyup changed delay:300ms" hx-target="#lista-limpieza" hx-push-url="true">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body" id="lista-limpieza">
+        {% include 'limpieza/_lista.html' %}
+    </div>
+</div>
+{% endblock %}

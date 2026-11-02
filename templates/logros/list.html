@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-trophy"></i> Mis Logros</h1>
+    <span class="badge bg-warning text-dark fs-5">🏅 {{ conquistados_count }} / {{ total_logros }}</span>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-2">
+            <strong>Progreso del Club</strong>
+            <strong>{{ progreso }}%</strong>
+        </div>
+        <div class="progress">
+            <div class="progress-bar bg-success" style="width: {{ progreso }}%"></div>
+        </div>
+    </div>
+</div>
+
+<h3><i class="fas fa-medal"></i> Conquistados</h3>
+<div class="row g-3">
+    {% for l in logros_conquistados %}
+    <div class="col-md-4 col-lg-3">
+        <div class="card border-warning logro-card">
+            <div class="card-body text-center">
+                <div class="display-4">{{ l.icono }}</div>
+                <h5>{{ l.titulo }}</h5>
+                <p class="text-muted mb-0">{{ l.descripcion }}</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">Todavía no has conquistado ningún logro. ¡Sigue así, caballo de batalla!</div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if logros_pendientes %}
+<h3 class="mt-4"><i class="fas fa-clock"></i> Próximos logros</h3>
+<div class="row g-3">
+    {% for l in logros_pendientes %}
+    <div class="col-md-4 col-lg-3">
+        <div class="card bg-light logro-card">
+            <div class="card-body text-center">
+                <div class="display-4 text-muted">{{ l.icono }}</div>
+                <h5>{{ l.titulo }}</h5>
+                <p class="text-muted mb-0">{{ l.descripcion }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

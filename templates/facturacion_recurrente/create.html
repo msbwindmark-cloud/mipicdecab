@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-redo"></i> Nueva Factura Recurrente</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Propietario</label>
+                            <select name="propietario" class="form-select" required>
+                                {% for p in propietarios %}
+                                <option value="{{ p.pk }}">{{ p }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Concepto</label>
+                            <input type="text" name="concepto" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Importe (€)</label>
+                            <input type="number" name="importe" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Frecuencia</label>
+                            <select name="frecuencia" class="form-select">
+                                <option value="MENSUAL">Mensual</option>
+                                <option value="BIMENSUAL">Bimensual</option>
+                                <option value="TRIMESTRAL">Trimestral</option>
+                                <option value="SEMESTRAL">Semestral</option>
+                                <option value="ANUAL">Anual</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Día de Emisión</label>
+                            <input type="number" name="dia_emision" class="form-control" min="1" max="28" value="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Inicio</label>
+                            <input type="date" name="fecha_inicio" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Fin (opcional)</label>
+                            <input type="date" name="fecha_fin" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Notas</label>
+                            <textarea name="notas" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Crear</button>
+                        <a href="{% url 'recurrente_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

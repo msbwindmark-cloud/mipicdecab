@@ -1,0 +1,68 @@
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Caballo</th>
+                <th>Propietario</th>
+                <th>Tipo</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Tarifa Mensual</th>
+                <th>Dias</th>
+                <th>Coste Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in page_obj %}
+            <tr>
+                <td><strong>{{ r.caballo.nombre }}</strong></td>
+                <td>{{ r.propietario }}</td>
+                <td>{{ r.get_tipo_display }}</td>
+                <td>{{ r.fecha_inicio }}</td>
+                <td>{{ r.fecha_fin|default:"-" }}</td>
+                <td>{{ r.tarifa_mensual }} €</td>
+                <td>{{ r.dias_residencia }}</td>
+                <td>{{ r.coste_total }} €</td>
+                <td>
+                    {% if r.estado == 'ACTIVA' %}<span class="badge bg-success">Activa</span>
+                    {% elif r.estado == 'FINALIZADA' %}<span class="badge bg-secondary">Finalizada</span>
+                    {% else %}<span class="badge bg-warning text-dark">Suspendida</span>{% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'residencia_detail' r.pk %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'residencia_update' r.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'residencia_delete' r.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10" class="text-center text-muted">No se encontraron resultados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if page_obj.has_other_pages %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}"
+               hx-get="?q={{ query }}&page={{ page_obj.previous_page_number }}"
+               hx-target="#lista-residencias" hx-push-url="true">Anterior</a>
+        </li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}"
+               hx-get="?q={{ query }}&page={{ page_obj.next_page_number }}"
+               hx-target="#lista-residencias" hx-push-url="true">Siguiente</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

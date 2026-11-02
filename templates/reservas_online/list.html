@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-calendar-plus"></i> Reservas Online</h1>
+    <a href="{% url 'reserva_online_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nueva Reserva</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Pista</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Propietario</th>
+                        <th>Caballo</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reservas %}
+                    <tr>
+                        <td>{{ r.pista.nombre }}</td>
+                        <td>{{ r.fecha }}</td>
+                        <td>{{ r.hora_inicio }} - {{ r.hora_fin }}</td>
+                        <td>{{ r.propietario }}</td>
+                        <td>{{ r.caballo|default:"-" }}</td>
+                        <td>{{ r.get_tipo_display }}</td>
+                        <td>
+                            {% if r.estado == 'CONFIRMADA' %}<span class="badge bg-success">Confirmada</span>
+                            {% elif r.estado == 'PENDIENTE' %}<span class="badge bg-warning text-dark">Pendiente</span>
+                            {% elif r.estado == 'CANCELADA' %}<span class="badge bg-secondary">Cancelada</span>
+                            {% else %}<span class="badge bg-info">Completada</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No hay reservas online</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

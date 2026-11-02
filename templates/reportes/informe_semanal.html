@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe Semanal</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; color: #333; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #28a745; padding-bottom: 10px; }
+        h1 { font-size: 22px; color: #28a745; }
+        h2 { font-size: 15px; margin-top: 25px; color: #17a2b8; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; font-size: 11px; }
+        th { background-color: #f2f2f2; }
+        .total { text-align: right; margin-top: 10px; font-size: 14px; font-weight: bold; }
+        .footer { margin-top: 40px; text-align: center; font-size: 10px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏇 INFORME SEMANAL - ECUESTREMANAGER</h1>
+        <p>Semana del {{ lunes }} al {{ domingo }}</p>
+    </div>
+
+    <h2>💶 Caja y Finanzas</h2>
+    <table>
+        <tr><th>Concepto</th><th>Total (€)</th></tr>
+        <tr><td>Ingresos de la semana</td><td>{{ ingresos }}</td></tr>
+        <tr><td>Gastos de la semana</td><td>{{ gastos }}</td></tr>
+        <tr><td><strong>Saldo</strong></td><td><strong>{{ saldo }}</strong></td></tr>
+    </table>
+
+    <h2>🧾 Facturación</h2>
+    <table>
+        <tr><th>Concepto</th><th>Total (€)</th></tr>
+        <tr><td>Facturado la semana</td><td>{{ facturado }}</td></tr>
+        <tr><td>Cobrado la semana</td><td>{{ cobrado }}</td></tr>
+        <tr><td>Pendiente (total general)</td><td>{{ pendiente }}</td></tr>
+        <tr><td>Num. facturas emitidas</td><td>{{ num_facturas }}</td></tr>
+    </table>
+
+    <h2>🏇 Entrenamientos</h2>
+    <table>
+        <tr><th>Concepto</th><th>Valor</th></tr>
+        <tr><td>Entrenamientos en la semana</td><td>{{ entrenamientos.count }}</td></tr>
+        <tr><td>Completados</td><td>{{ entrenamientos_completados }}</td></tr>
+    </table>
+
+    <h2>⚠️ Alertas y Seguimiento</h2>
+    <table>
+        <tr><th>Concepto</th><th>Detalle</th></tr>
+        {% for p in alertas_stock %}
+        <tr><td>Stock bajo</td><td>{{ p.nombre }} ({{ p.stock_actual }} {{ p.unidad }})</td></tr>
+        {% endfor %}
+        {% for h in herrajes %}
+        <tr><td>Herraje próximo</td><td>{{ h.caballo.nombre }} - {{ h.proximo_herraje }}</td></tr>
+        {% endfor %}
+        {% for v in vacunas %}
+        <tr><td>Vacuna/Desparasitación</td><td>{{ v.caballo.nombre }} - {{ v.get_tipo_display }} - {{ v.proxima_fecha }}</td></tr>
+        {% endfor %}
+    </table>
+
+    <div class="footer">
+        <p>EcuestreManager - Informe generado automáticamente</p>
+    </div>
+</body>
+</html>

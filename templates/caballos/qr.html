@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">QR - {{ caballo.nombre }}</h4>
+            </div>
+            <div class="card-body">
+                <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" class="img-fluid mb-3" style="max-width: 300px;">
+                <p class="text-muted">Escanea para acceder directamente a la ficha</p>
+                <a href="{% url 'caballo_detail' caballo.pk %}" class="btn btn-primary">Ver Ficha</a>
+                <a href="{% url 'caballo_list' %}" class="btn btn-secondary">Volver</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

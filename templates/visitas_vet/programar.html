@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0"><i class="fas fa-stethoscope"></i> Programar Visita Veterinaria</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Caballo</label>
+                            <select name="caballo" class="form-select" required>
+                                {% for c in caballos %}
+                                <option value="{{ c.pk }}">{{ c.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Veterinario</label>
+                            <input type="text" name="veterinario" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select">
+                                <option value="REVISION">Revisión General</option>
+                                <option value="URGENCIA">Urgencia</option>
+                                <option value="CIRUGIA">Cirugía</option>
+                                <option value="SEGUIMIENTO">Seguimiento</option>
+                                <option value="VACUNACION">Vacunación</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Programada</label>
+                            <input type="date" name="fecha_programada" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Motivo</label>
+                            <textarea name="motivo" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Notas</label>
+                            <textarea name="notas" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Programar Visita</button>
+                        <a href="{% url 'visita_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

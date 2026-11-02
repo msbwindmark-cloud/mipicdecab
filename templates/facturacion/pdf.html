@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Factura {{ factura.numero_factura }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .datos { margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .total { text-align: right; margin-top: 20px; font-size: 14px; font-weight: bold; }
+        .footer { margin-top: 50px; text-align: center; font-size: 10px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ config_picadero.nombre|default:"ECUESTREMANAGER" }}</h1>
+        {% if config_picadero.direccion %}<p>{{ config_picadero.direccion|linebreaksbr }}</p>{% endif %}
+        {% if config_picadero.telefono %}<p>Tel: {{ config_picadero.telefono }}</p>{% endif %}
+        {% if config_picadero.email %}<p>Email: {{ config_picadero.email }}</p>{% endif %}
+        {% if config_picadero.cif_nif %}<p>CIF/NIF: {{ config_picadero.cif_nif }}</p>{% endif %}
+    </div>
+    
+    <div class="datos">
+        <strong>FACTURA Nº: {{ factura.numero_factura }}</strong><br>
+        <strong>Fecha de Emisión:</strong> {{ factura.fecha_emision }}<br>
+        <strong>Fecha de Vencimiento:</strong> {{ factura.fecha_vencimiento }}<br><br>
+        <strong>CLIENTE:</strong><br>
+        {{ factura.propietario.nombre }} {{ factura.propietario.apellidos }}<br>
+        DNI/CIF: {{ factura.propietario.dni_cif }}<br>
+        {{ factura.propietario.direccion }}<br>
+        Tel: {{ factura.propietario.telefono }}<br>
+        Email: {{ factura.propietario.email }}
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for concepto in factura.conceptos.all %}
+            <tr>
+                <td>{{ concepto.descripcion }}</td>
+                <td>{{ concepto.cantidad }}</td>
+                <td>{{ concepto.precio_unitario }} €</td>
+                <td>{{ concepto.subtotal }} €</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="total">
+        TOTAL: {{ factura.total }} €
+    </div>
+    
+    <div class="footer">
+        <p>Estado: {{ factura.get_estado_display }}</p>
+        <p>Gracias por su confianza</p>
+    </div>
+</body>
+</html>

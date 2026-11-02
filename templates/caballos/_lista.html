@@ -1,0 +1,78 @@
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Propietario</th>
+                <th>Box</th>
+                <th>Tipo Pupilaje</th>
+                <th>Estado</th>
+                <th>Herraje</th>
+                <th>Vacuna</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for caballo in page_obj %}
+            <tr>
+                <td><strong>{{ caballo.nombre }}</strong></td>
+                <td>{{ caballo.propietario }}</td>
+                <td>{{ caballo.box|default:"Sin asignar" }}</td>
+                <td>{{ caballo.get_tipo_pupilaje_display }}</td>
+                <td><span class="badge bg-info">{{ caballo.get_estado_display }}</span></td>
+                <td>
+                    {% if caballo.semaforo_herraje == 'red' %}<span class="badge bg-danger" title="Vencido">●</span>
+                    {% elif caballo.semaforo_herraje == 'orange' %}<span class="badge bg-warning text-dark" title="<=7 días">●</span>
+                    {% elif caballo.semaforo_herraje == 'yellow' %}<span class="badge bg-warning" title="<=14 días">●</span>
+                    {% elif caballo.semaforo_herraje == 'green' %}<span class="badge bg-success" title=">14 días">●</span>
+                    {% else %}<span class="badge bg-secondary">-</span>{% endif %}
+                    {% if caballo.dias_herraje is not None %}<small>{{ caballo.dias_herraje }}d</small>{% endif %}
+                </td>
+                <td>
+                    {% if caballo.semaforo_vacuna == 'red' %}<span class="badge bg-danger" title="Vencido">●</span>
+                    {% elif caballo.semaforo_vacuna == 'orange' %}<span class="badge bg-warning text-dark" title="<=7 días">●</span>
+                    {% elif caballo.semaforo_vacuna == 'yellow' %}<span class="badge bg-warning" title="<=14 días">●</span>
+                    {% elif caballo.semaforo_vacuna == 'green' %}<span class="badge bg-success" title=">14 días">●</span>
+                    {% else %}<span class="badge bg-secondary">-</span>{% endif %}
+                    {% if caballo.dias_vacuna is not None %}<small>{{ caballo.dias_vacuna }}d</small>{% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'caballo_detail' caballo.pk %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'galeria_caballo' caballo.pk %}" class="btn btn-sm btn-success"><i class="fas fa-images"></i></a>
+                    <a href="{% url 'caballo_qr' caballo.pk %}" class="btn btn-sm btn-dark"><i class="fas fa-qrcode"></i></a>
+                    <a href="{% url 'caballo_update' caballo.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'caballo_delete' caballo.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center text-muted">No se encontraron resultados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if page_obj.has_other_pages %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}" 
+               hx-get="?q={{ query }}&page={{ page_obj.previous_page_number }}" 
+               hx-target="#lista-caballos" 
+               hx-push-url="true">Anterior</a>
+        </li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}" 
+               hx-get="?q={{ query }}&page={{ page_obj.next_page_number }}" 
+               hx-target="#lista-caballos" 
+               hx-push-url="true">Siguiente</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

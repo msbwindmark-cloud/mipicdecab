@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0"><i class="fas fa-file-invoice"></i> Nueva Factura</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Propietario</label>
+                        <select name="propietario" class="form-select" required>
+                            <option value="">Seleccionar...</option>
+                            {% for propietario in propietarios %}
+                            <option value="{{ propietario.pk }}">{{ propietario }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Conceptos</h5>
+                    <div id="conceptos">
+                        <div class="row g-2 mb-2 concepto-row">
+                            <div class="col-md-5">
+                                <input type="text" name="descripcion[]" class="form-control" placeholder="Descripción" required>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" name="cantidad[]" class="form-control" placeholder="Cantidad" value="1" min="1" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" name="precio[]" class="form-control" placeholder="Precio unitario" step="0.01" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger" onclick="eliminarFila(this)"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary mb-3" onclick="agregarFila()"><i class="fas fa-plus"></i> Añadir concepto</button>
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Crear Factura</button>
+                        <a href="{% url 'factura_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function agregarFila() {
+    const div = document.createElement('div');
+    div.className = 'row g-2 mb-2 concepto-row';
+    div.innerHTML = `
+        <div class="col-md-5">
+            <input type="text" name="descripcion[]" class="form-control" placeholder="Descripción" required>
+        </div>
+        <div class="col-md-2">
+            <input type="number" name="cantidad[]" class="form-control" placeholder="Cantidad" value="1" min="1" required>
+        </div>
+        <div class="col-md-3">
+            <input type="number" name="precio[]" class="form-control" placeholder="Precio unitario" step="0.01" required>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-danger" onclick="eliminarFila(this)"><i class="fas fa-trash"></i></button>
+        </div>
+    `;
+    document.getElementById('conceptos').appendChild(div);
+}
+
+function eliminarFila(btn) {
+    if(document.querySelectorAll('.concepto-row').length > 1) {
+        btn.closest('.concepto-row').remove();
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-euro-sign"></i> Historial Económico - {{ caballo.nombre }}</h1>
+    <div>
+        <a href="{% url 'ficha_clinica_pdf' caballo.pk %}" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Ficha Clínica PDF</a>
+        <a href="{% url 'caballo_detail' caballo.pk %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Volver</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Facturas relacionadas con este caballo</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nº Factura</th>
+                        <th>Fecha</th>
+                        <th>Concepto</th>
+                        <th>Importe</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for factura in caballo.propietario.facturas.all %}
+                    <tr>
+                        <td>{{ factura.numero_factura }}</td>
+                        <td>{{ factura.fecha_emision }}</td>
+                        <td>
+                            {% for concepto in factura.conceptos.all %}
+                            {{ concepto.descripcion }} ({{ concepto.cantidad }}x{{ concepto.precio_unitario }}€)<br>
+                            {% endfor %}
+                        </td>
+                        <td>{{ factura.total }} €</td>
+                        <td>
+                            {% if factura.estado == 'PAGADO' %}<span class="badge bg-success">Pagado</span>
+                            {% elif factura.estado == 'PENDIENTE' %}<span class="badge bg-warning text-dark">Pendiente</span>
+                            {% else %}<span class="badge bg-secondary">Cancelado</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Sin facturas</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

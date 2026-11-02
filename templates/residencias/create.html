@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-home"></i> Nueva Residencia/Pupilaje</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Caballo</label>
+                            <select name="caballo" class="form-select" required>
+                                {% for c in caballos %}
+                                <option value="{{ c.pk }}">{{ c.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Propietario</label>
+                            <select name="propietario" class="form-select" required>
+                                {% for p in propietarios %}
+                                <option value="{{ p.pk }}">{{ p }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select">
+                                <option value="PUPILAJE_COMPLETO">Pupilaje Completo</option>
+                                <option value="SEMI_PUPILAJE">Semi-pupilaje</option>
+                                <option value="PENSION">Pensión</option>
+                                <option value="ENTRENAMIENTO">Entrenamiento</option>
+                                <option value="REHABILITACION">Rehabilitación</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tarifa Mensual (€)</label>
+                            <input type="number" name="tarifa_mensual" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Box (opcional)</label>
+                            <select name="box" class="form-select">
+                                <option value="">Sin box</option>
+                                {% for b in boxes %}
+                                <option value="{{ b.pk }}">Box {{ b.numero }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Inicio</label>
+                            <input type="date" name="fecha_inicio" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Fin (opcional)</label>
+                            <input type="date" name="fecha_fin" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Notas</label>
+                            <textarea name="notas" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Crear Residencia</button>
+                        <a href="{% url 'residencia_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

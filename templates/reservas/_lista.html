@@ -1,0 +1,60 @@
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Pista</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Propietario</th>
+                <th>Caballo</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in page_obj %}
+            <tr>
+                <td>{{ r.pista.nombre }}</td>
+                <td>{{ r.fecha }}</td>
+                <td>{{ r.hora_inicio }} - {{ r.hora_fin }}</td>
+                <td>{{ r.propietario }}</td>
+                <td>{{ r.caballo|default:"-" }}</td>
+                <td>{{ r.motivo }}</td>
+                <td>
+                    {% if r.estado == 'CONFIRMADA' %}<span class="badge bg-success">Confirmada</span>
+                    {% elif r.estado == 'PENDIENTE' %}<span class="badge bg-warning text-dark">Pendiente</span>
+                    {% elif r.estado == 'CANCELADA' %}<span class="badge bg-secondary">Cancelada</span>
+                    {% else %}<span class="badge bg-info">Completada</span>{% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'reserva_detail' r.pk %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'reserva_update' r.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'reserva_delete' r.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center text-muted">No se encontraron resultados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if page_obj.has_other_pages %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-target="#lista-reservas" hx-push-url="true">Anterior</a>
+        </li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-target="#lista-reservas" hx-push-url="true">Siguiente</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

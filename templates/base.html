@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#212529">
+    <title>{{ config_picadero.nombre|default:"EcuestreManager" }} - Gestión de Picaderos</title>
+    <link rel="manifest" href="/static/manifest.json">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+      <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body" id="toastMessage">
+            ¡Operación realizada con éxito!
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'dashboard' %}">
+                {% if config_picadero.logo %}
+                    <img src="{{ config_picadero.logo.url }}" height="30" class="me-2">
+                {% endif %}
+                <i class="fas fa-horse"></i> {{ config_picadero.nombre|default:"EcuestreManager" }}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'caballo_list' %}"><i class="fas fa-horse"></i> Caballos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'propietario_list' %}"><i class="fas fa-users"></i> Propietarios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'factura_list' %}"><i class="fas fa-file-invoice-dollar"></i> Facturación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'clase_list' %}"><i class="fas fa-chalkboard-teacher"></i> Clases</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'mapa_boxes' %}"><i class="fas fa-th-large"></i> Boxes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'inventario_list' %}"><i class="fas fa-boxes"></i> Inventario</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'caja_list' %}"><i class="fas fa-cash-register"></i> Caja</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'alimentacion_list' %}"><i class="fas fa-utensils"></i> Alimentación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'medicacion_list' %}"><i class="fas fa-pills"></i> Medicación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'bitacora_list' %}"><i class="fas fa-book"></i> Bitácora</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'empleado_list' %}"><i class="fas fa-user-tie"></i> Empleados</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'limpieza_list' %}"><i class="fas fa-broom"></i> Limpieza</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'reserva_list' %}"><i class="fas fa-calendar-check"></i> Reservas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'seguro_list' %}"><i class="fas fa-shield-alt"></i> Seguros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'proveedor_list' %}"><i class="fas fa-truck"></i> Proveedores</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'gasto_list' %}"><i class="fas fa-money-bill-wave"></i> Gastos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'documento_list' %}"><i class="fas fa-file-alt"></i> Documentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'visita_list' %}"><i class="fas fa-stethoscope"></i> Visitas Vet</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'transporte_list' %}"><i class="fas fa-truck-moving"></i> Transporte</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'reproduccion_list' %}"><i class="fas fa-venus-mars"></i> Reproducción</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'mantenimiento_list' %}"><i class="fas fa-tools"></i> Mantenimiento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'fidelizacion_list' %}"><i class="fas fa-star"></i> Fidelización</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'mensajeria_list' %}"><i class="fas fa-comments"></i> Mensajería</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'venta_list' %}"><i class="fas fa-tag"></i> Ventas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'concurso_list' %}"><i class="fas fa-trophy"></i> Concursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'desparasitacion_list' %}"><i class="fas fa-bug"></i> Desparasitación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'recurrente_list' %}"><i class="fas fa-redo"></i> Fact. Recurrente</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'curso_list' %}"><i class="fas fa-graduation-cap"></i> Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'notificacion_list' %}"><i class="fas fa-bell"></i> Notificaciones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'reserva_online_list' %}"><i class="fas fa-calendar-plus"></i> Reservas Online</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'herraje_list' %}"><i class="fas fa-hammer"></i> Herrajes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'encuesta_list' %}"><i class="fas fa-poll"></i> Encuestas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'consumo_list' %}"><i class="fas fa-tint"></i> Consumos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'residencia_list' %}"><i class="fas fa-home"></i> Residencias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'tarea_list' %}"><i class="fas fa-tasks"></i> Tareas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'evento_list' %}"><i class="fas fa-trophy"></i> Eventos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'reporte_mensual' %}"><i class="fas fa-chart-line"></i> Reportes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'informe_semanal' %}"><i class="fas fa-file-pdf"></i> Informe Semanal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'simulador' %}"><i class="fas fa-calculator"></i> Simulador</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'landing' %}"><i class="fas fa-rocket"></i> Showcase</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'entrenamiento_list' %}"><i class="fas fa-running"></i> Entrenamientos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logro_list' %}"><i class="fas fa-trophy"></i> Logros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'ranking_list' %}"><i class="fas fa-medal"></i> Ranking</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'mapa_picadero' %}"><i class="fas fa-map"></i> Mapa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'chat_panel' %}"><i class="fas fa-comments"></i> Chat</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'equest_ai_home' %}"><i class="fas fa-robot"></i> Equest AI</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'portal_inicio' %}"><i class="fas fa-user-circle"></i> Portal Propietario</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'calendario' %}"><i class="fas fa-calendar-alt"></i> Calendario</a></li>
+                </ul>
+                <form class="d-flex me-3" style="position:relative;">
+                    <input class="form-control" type="search" placeholder="Búsqueda global..." name="q"
+                           hx-get="{% url 'busqueda_global' %}" hx-trigger="keyup changed delay:300ms" hx-target="#global-results" autocomplete="off">
+                    <div id="global-results" class="list-group position-absolute" style="top:100%; width:100%; z-index:1000;"></div>
+                </form>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell"></i>
+                            {% if alertas_count > 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ alertas_count }}
+                            </span>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="min-width: 300px;">
+                            <li class="dropdown-header">Alertas</li>
+                            {% for alerta in alertas_list %}
+                            <li><a class="dropdown-item" href="{{ alerta.url }}">{{ alerta.texto }}</a></li>
+                            {% empty %}
+                            <li><span class="dropdown-item text-muted">Sin alertas</span></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-link nav-link" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></button>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/" target="_blank"><i class="fas fa-cog"></i> Panel Admin</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i> {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">Cerrar Sesión</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.min.js"></script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/static/sw.js');
+        });
+      }
+      
+      function toggleTheme() {
+        const html = document.documentElement;
+        const theme = html.getAttribute('data-bs-theme');
+        const icon = document.getElementById('themeIcon');
+        if(theme === 'dark') {
+          html.setAttribute('data-bs-theme', 'light');
+          icon.className = 'fas fa-moon';
+          localStorage.setItem('theme', 'light');
+        } else {
+          html.setAttribute('data-bs-theme', 'dark');
+          icon.className = 'fas fa-sun';
+          localStorage.setItem('theme', 'dark');
+        }
+      }
+      
+      document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        const icon = document.getElementById('themeIcon');
+        if(icon) icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      });
+
+      function showToast(message, type = 'success') {
+          const toastEl = document.getElementById('liveToast');
+          const toastMessage = document.getElementById('toastMessage');
+          
+          toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+          toastMessage.innerText = message;
+          
+          const toast = new bootstrap.Toast(toastEl);
+          toast.show();
+      }
+
+      function registrarPagoModal(facturaId) {
+          Swal.fire({
+              title: '¿Confirmar cobro?',
+              text: "Esta acción marcará la factura como completada.",
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonColor: '#198754',
+              cancelButtonColor: '#6c757d',
+              confirmButtonText: 'Sí, registrar pago',
+              cancelButtonText: 'Cancelar'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  fetch(`/facturacion/cobrar/${facturaId}/`, {
+                      method: 'POST',
+                      headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                  }).then(response => {
+                      if(response.ok) {
+                          Swal.fire('¡Cobrado!', 'El pago ha sido registrado.', 'success')
+                          .then(() => location.reload());
+                      }
+                  });
+              }
+          });
+      }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

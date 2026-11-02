@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-comment-dots"></i> Conversación con {{ conversacion.propietario }}</h1>
+    <a href="{% url 'chat_panel' %}" class="btn btn-secondary">Volver</a>
+</div>
+<div class="card mb-4">
+    <div class="card-body" style="height: 400px; overflow-y: auto;">
+        {% for m in mensajes %}
+        <div class="mb-3 {% if m.autor == 'PICADERO' %text-end{% endif %}">
+            <div class="d-inline-block p-2 rounded {% if m.autor == 'PICADERO' %}bg-primary text-white{% else %}bg-light{% endif %}" style="max-width: 70%;">
+                <div>{{ m.contenido }}</div>
+                <small class="text-muted">{{ m.fecha }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<form method="post" action="{% url 'chat_enviar' conversacion.pk %}">
+    {% csrf_token %}
+    <div class="input-group">
+        <input type="text" name="contenido" class="form-control" placeholder="Escribe a respuesta..." required>
+        <button class="btn btn-primary"><i class="fas fa-paper-plane"></i>Enviar</button>
+    </div>
+</form>
+{% endblock %}

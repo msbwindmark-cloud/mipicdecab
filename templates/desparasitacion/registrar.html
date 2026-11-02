@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0"><i class="fas fa-bug"></i> Registrar Desparasitación</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Plan</label>
+                        <select name="plan" class="form-select" required>
+                            {% for p in planes %}
+                            <option value="{{ p.pk }}">{{ p.caballo.nombre }} - {{ p.producto }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Producto Usado</label>
+                        <input type="text" name="producto_usado" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dosis</label>
+                        <input type="text" name="dosis" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Coste (€)</label>
+                        <input type="number" name="coste" class="form-control" step="0.01" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Realizado por</label>
+                        <input type="text" name="realizado_por" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Notas</label>
+                        <textarea name="notas" class="form-control" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100"><i class="fas fa-save"></i> Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-venus-mars"></i> Reproducción y Crianza</h1>
+    <a href="{% url 'reproduccion_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nueva Cubrición</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <input type="text" class="form-control" name="q" placeholder="Buscar por yegua, semental, tipo, estado..." value="{{ query }}"
+               hx-get="{% url 'reproduccion_list' %}" hx-trigger="keyup changed delay:300ms" hx-target="#lista-reproduccion" hx-push-url="true">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body" id="lista-reproduccion">
+        {% include 'reproduccion/_lista.html' %}
+    </div>
+</div>
+{% endblock %}

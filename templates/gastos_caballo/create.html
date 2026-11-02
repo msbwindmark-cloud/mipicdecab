@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0"><i class="fas fa-money-bill-wave"></i> Nuevo Gasto</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Caballo</label>
+                            <select name="caballo" class="form-select" required>
+                                {% for c in caballos %}
+                                <option value="{{ c.pk }}">{{ c.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Categoría</label>
+                            <select name="categoria" class="form-select">
+                                <option value="VETERINARIO">Veterinario</option>
+                                <option value="HERRAJE">Herraje</option>
+                                <option value="ALIMENTACION">Alimentación</option>
+                                <option value="MEDICACION">Medicación</option>
+                                <option value="TRANSPORTE">Transporte</option>
+                                <option value="COMPETICION">Competición</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Concepto</label>
+                            <input type="text" name="concepto" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Importe (€)</label>
+                            <input type="number" name="importe" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" name="fecha" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Proveedor</label>
+                            <input type="text" name="proveedor" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Notas</label>
+                            <input type="text" name="notas" class="form-control">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Registrar Gasto</button>
+                        <a href="{% url 'gasto_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

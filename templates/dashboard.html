@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1><i class="fas fa-tachometer-alt"></i> Dashboard - EcuestreManager</h1>
+        <p class="text-muted">Gestión integral del picadero</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Caballos</h6>
+                        <h2>{{ total_caballos }}</h2>
+                    </div>
+                    <i class="fas fa-horse fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Propietarios</h6>
+                        <h2>{{ total_propietarios }}</h2>
+                    </div>
+                    <i class="fas fa-users fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Facturas Pendientes</h6>
+                        <h2>{{ facturas_pendientes }}</h2>
+                    </div>
+                    <i class="fas fa-file-invoice-dollar fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Boxes Ocupados</h6>
+                        <h2>{{ boxes_ocupados }}/{{ total_boxes }}</h2>
+                    </div>
+                    <i class="fas fa-home fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-trophy"></i> Mis Logros</h5>
+            </div>
+            <div class="card-body">
+                {% if logros_conquistados %}
+                <div class="d-flex flex-wrap gap-2">
+                    {% for l in logros_conquistados %}
+                    <span class="badge bg-warning text-dark fs-6 p-3" title="{{ l.logro.titulo }}">{{ l.logro.icono }} {{ l.logro.titulo }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted mb-0">Aún no has conquistado ningún logro. ¡Sigue así, caballo de batalla!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-hammer"></i> Herrajes Próximos</h5>
+            </div>
+            <div class="card-body">
+                {% if herrajes_proximos %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Caballo</th>
+                                <th>Próximo Herraje</th>
+                                <th>Herrador</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in herrajes_proximos %}
+                            <tr>
+                                <td><a href="{% url 'caballo_detail' h.caballo.pk %}">{{ h.caballo.nombre }}</a></td>
+                                <td>{{ h.proximo_herraje }}</td>
+                                <td>{{ h.herrador|default:"-" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No hay herrajes próximos programados</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-syringe"></i> Vacunas Próximas</h5>
+            </div>
+            <div class="card-body">
+                {% if vacunas_proximas %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Caballo</th>
+                                <th>Próxima Fecha</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for v in vacunas_proximas %}
+                            <tr>
+                                <td><a href="{% url 'caballo_detail' v.caballo.pk %}" class="text-white">{{ v.caballo.nombre }}</a></td>
+                                <td>{{ v.proxima_fecha }}</td>
+                                <td>{{ v.get_tipo_display }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No hay vacunas próximas</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card text-bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Ingresos</h6>
+                        <h3>{{ ingresos }} €</h3>
+                    </div>
+                    <i class="fas fa-arrow-up fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-danger">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Gastos</h6>
+                        <h3>{{ gastos }} €</h3>
+                    </div>
+                    <i class="fas fa-arrow-down fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Saldo</h6>
+                        <h3>{{ saldo }} €</h3>
+                    </div>
+                    <i class="fas fa-wallet fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Stock Bajo</h5>
+            </div>
+            <div class="card-body">
+                {% for p in productos_stock_bajo %}
+                <div class="d-flex justify-content-between border-bottom py-1">
+                    <span>{{ p.nombre }}</span>
+                    <span class="text-danger">{{ p.stock_actual }} {{ p.unidad }}</span>
+                </div>
+                {% empty %}
+                <p class="text-muted">Todo correcto</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Ocupación de Boxes</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="boxesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Estado de Facturas</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="facturasChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const boxesCtx = document.getElementById('boxesChart');
+    if(boxesCtx) {
+        new Chart(boxesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ocupados', 'Libres'],
+                datasets: [{
+                    data: [{{ boxes_ocupados }}, {{ total_boxes|add:0 }} - {{ boxes_ocupados }}],
+                    backgroundColor: ['#dc3545', '#198754']
+                }]
+            }
+        });
+    }
+    
+    const facturasCtx = document.getElementById('facturasChart');
+    if(facturasCtx) {
+        new Chart(facturasCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Pendientes'],
+                datasets: [{
+                    label: 'Facturas',
+                    data: [{{ facturas_pendientes }}],
+                    backgroundColor: '#ffc107'
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

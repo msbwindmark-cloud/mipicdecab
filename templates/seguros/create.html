@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0"><i class="fas fa-shield-alt"></i> Nuevo Seguro</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Caballo</label>
+                            <select name="caballo" class="form-select" required>
+                                {% for c in caballos %}
+                                <option value="{{ c.pk }}">{{ c.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select">
+                                <option value="RC">Responsabilidad Civil</option>
+                                <option value="ACCIDENTES">Accidentes</option>
+                                <option value="VIDA">Vida/Muerte</option>
+                                <option value="TODO_RIESGO">Todo Riesgo</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Compañía</label>
+                            <input type="text" name="compania" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nº Póliza</label>
+                            <input type="text" name="numero_poliza" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha Inicio</label>
+                            <input type="date" name="fecha_inicio" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha Vencimiento</label>
+                            <input type="date" name="fecha_vencimiento" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Importe (€)</label>
+                            <input type="number" name="importe" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Cobertura</label>
+                            <textarea name="cobertura" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Notas</label>
+                            <textarea name="notas" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Crear Seguro</button>
+                        <a href="{% url 'seguro_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

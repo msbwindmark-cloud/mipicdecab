@@ -1,0 +1,66 @@
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Título</th>
+                <th>Caballo</th>
+                <th>Asignado a</th>
+                <th>Prioridad</th>
+                <th>Estado</th>
+                <th>Fecha Límite</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tarea in page_obj %}
+            <tr class="{% if tarea.vencida %}table-danger{% endif %}">
+                <td><strong>{{ tarea.titulo }}</strong><br><small class="text-muted">{{ tarea.descripcion }}</small></td>
+                <td>{{ tarea.caballo|default:"-" }}</td>
+                <td>{{ tarea.asignado_a|default:"Sin asignar" }}</td>
+                <td>
+                    {% if tarea.prioridad == 'URGENTE' %}<span class="badge bg-danger">Urgente</span>
+                    {% elif tarea.prioridad == 'ALTA' %}<span class="badge bg-warning text-dark">Alta</span>
+                    {% elif tarea.prioridad == 'MEDIA' %}<span class="badge bg-info">Media</span>
+                    {% else %}<span class="badge bg-secondary">Baja</span>{% endif %}
+                </td>
+                <td>
+                    {% if tarea.estado == 'COMPLETADA' %}<span class="badge bg-success">Completada</span>
+                    {% elif tarea.estado == 'EN_PROGRESO' %}<span class="badge bg-primary">En Progreso</span>
+                    {% elif tarea.estado == 'CANCELADA' %}<span class="badge bg-secondary">Cancelada</span>
+                    {% else %}<span class="badge bg-warning text-dark">Pendiente</span>{% endif %}
+                </td>
+                <td>{{ tarea.fecha_limite|default:"-" }}</td>
+                <td>
+                    {% if tarea.estado != 'COMPLETADA' %}
+                    <a href="{% url 'tarea_completar' tarea.pk %}" class="btn btn-sm btn-success"><i class="fas fa-check"></i></a>
+                    {% endif %}
+                    <a href="{% url 'tarea_detail' tarea.pk %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'tarea_update' tarea.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'tarea_delete' tarea.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center text-muted">No se encontraron resultados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if page_obj.has_other_pages %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-target="#lista-tareas" hx-push-url="true">Anterior</a>
+        </li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-target="#lista-tareas" hx-push-url="true">Siguiente</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

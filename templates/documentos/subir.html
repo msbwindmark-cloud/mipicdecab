@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-upload"></i> Subir Documento</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Título</label>
+                            <input type="text" name="titulo" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select">
+                                <option value="PASAPORTE">Pasaporte</option>
+                                <option value="CERTIFICADO">Certificado</option>
+                                <option value="VACUNACION">Cartilla de Vacunación</option>
+                                <option value="SEGURO">Póliza de Seguro</option>
+                                <option value="FACTURA">Factura</option>
+                                <option value="CONTRATO">Contrato</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Caballo (opcional)</label>
+                            <select name="caballo" class="form-select">
+                                <option value="">Ninguno</option>
+                                {% for c in caballos %}
+                                <option value="{{ c.pk }}">{{ c.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Propietario (opcional)</label>
+                            <select name="propietario" class="form-select">
+                                <option value="">Ninguno</option>
+                                {% for p in propietarios %}
+                                <option value="{{ p.pk }}">{{ p }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha del Documento</label>
+                            <input type="date" name="fecha_documento" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Archivo</label>
+                            <input type="file" name="archivo" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Notas</label>
+                            <textarea name="notas" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Subir Documento</button>
+                        <a href="{% url 'documento_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

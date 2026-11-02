@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-tint"></i> Registrar Consumo</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select">
+                                <option value="AGUA">Agua</option>
+                                <option value="ELECTRICIDAD">Electricidad</option>
+                                <option value="GAS">Gas</option>
+                                <option value="COMBUSTIBLE">Combustible</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" name="fecha" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Importe (€)</label>
+                            <input type="number" name="importe" class="form-control" step="0.01" value="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Lectura Anterior</label>
+                            <input type="number" name="lectura_anterior" class="form-control" step="0.01" value="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Lectura Actual</label>
+                            <input type="number" name="lectura_actual" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Proveedor</label>
+                            <input type="text" name="proveedor" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Notas</label>
+                            <input type="text" name="notas" class="form-control">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Registrar</button>
+                        <a href="{% url 'consumo_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

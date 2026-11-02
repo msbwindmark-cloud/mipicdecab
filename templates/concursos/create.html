@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0"><i class="fas fa-trophy"></i> Nuevo Concurso</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" name="nombre" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Lugar</label>
+                            <input type="text" name="lugar" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" name="fecha" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Nivel</label>
+                            <select name="nivel" class="form-select">
+                                <option value="LOCAL">Local</option>
+                                <option value="REGIONAL">Regional</option>
+                                <option value="NACIONAL">Nacional</option>
+                                <option value="INTERNACIONAL">Internacional</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Disciplina</label>
+                            <select name="disciplina" class="form-select">
+                                <option value="DOMA">Doma Clásica</option>
+                                <option value="SALTO">Salto de Obstáculos</option>
+                                <option value="CONCURSO_COMPLETO">Concurso Completo</option>
+                                <option value="REINING">Reining</option>
+                                <option value="VAQUERA">Doma Vaquera</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Coste Inscripción (€)</label>
+                            <input type="number" name="coste_inscripcion" class="form-control" step="0.01" value="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Premio (€)</label>
+                            <input type="number" name="premio" class="form-control" step="0.01" value="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Organizador</label>
+                            <input type="text" name="organizador" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Notas</label>
+                            <textarea name="notas" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Crear Concurso</button>
+                        <a href="{% url 'concurso_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

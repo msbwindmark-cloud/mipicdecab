@@ -1,0 +1,40 @@
+{% for n in page_obj %}
+<div class="card mb-2 {% if not n.leida %}border-primary{% endif %}">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <div>
+                {% if n.tipo == 'URGENTE' %}<span class="badge bg-danger">Urgente</span>
+                {% elif n.tipo == 'ALERTA' %}<span class="badge bg-warning text-dark">Alerta</span>
+                {% elif n.tipo == 'RECORDATORIO' %}<span class="badge bg-info">Recordatorio</span>
+                {% else %}<span class="badge bg-secondary">Info</span>{% endif %}
+                <strong class="ms-2">{{ n.titulo }}</strong>
+            </div>
+            <small class="text-muted">{{ n.tiempo_transcurrido }}</small>
+        </div>
+        <p class="mb-1 mt-1">{{ n.mensaje }}</p>
+        {% if n.url %}<a href="{{ n.url }}" class="btn btn-sm btn-primary">Ver</a>{% endif %}
+        <a href="{% url 'notificacion_detail' n.pk %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+        <a href="{% url 'notificacion_update' n.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+        <a href="{% url 'notificacion_delete' n.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+    </div>
+</div>
+{% empty %}
+<div class="alert alert-info">No se encontraron resultados</div>
+{% endfor %}
+{% if page_obj.has_other_pages %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-target="#lista-notificaciones" hx-push-url="true">Anterior</a>
+        </li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-target="#lista-notificaciones" hx-push-url="true">Siguiente</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

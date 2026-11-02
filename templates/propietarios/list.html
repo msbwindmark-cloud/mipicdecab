@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-users"></i> Propietarios</h1>
+    <div>
+        <a href="{% url 'exportar_propietarios_excel' %}" class="btn btn-success"><i class="fas fa-file-excel"></i> Exportar Excel</a>
+        <a href="{% url 'propietario_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo Propietario</a>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <input type="text" 
+               class="form-control" 
+               name="q" 
+               placeholder="Buscar por nombre, apellidos, DNI/CIF, teléfono, email..." 
+               value="{{ query }}"
+               hx-get="{% url 'propietario_list' %}" 
+               hx-trigger="keyup changed delay:300ms" 
+               hx-target="#lista-propietarios"
+               hx-push-url="true">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body" id="lista-propietarios">
+        {% include 'propietarios/_lista.html' %}
+    </div>
+</div>
+{% endblock %}

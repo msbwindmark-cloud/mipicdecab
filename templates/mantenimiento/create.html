@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h3 class="mb-0"><i class="fas fa-tools"></i> Nuevo Mantenimiento</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo de Instalación</label>
+                            <select name="instalacion_tipo" class="form-select">
+                                <option value="BOX">Box</option>
+                                <option value="PISTA">Pista</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Box (opcional)</label>
+                            <select name="box" class="form-select">
+                                <option value="">Ninguno</option>
+                                {% for b in boxes %}
+                                <option value="{{ b.pk }}">Box {{ b.numero }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Pista (opcional)</label>
+                            <select name="pista" class="form-select">
+                                <option value="">Ninguna</option>
+                                {% for p in pistas %}
+                                <option value="{{ p.pk }}">{{ p.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select">
+                                <option value="REPARACION">Reparación</option>
+                                <option value="REVISION">Revisión</option>
+                                <option value="PINTURA">Pintura</option>
+                                <option value="FONTANERIA">Fontanería</option>
+                                <option value="ELECTRICIDAD">Electricidad</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Coste (€)</label>
+                            <input type="number" name="coste" class="form-control" step="0.01" value="0">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Descripción</label>
+                            <textarea name="descripcion" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Inicio</label>
+                            <input type="date" name="fecha_inicio" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Realizado por</label>
+                            <input type="text" name="realizado_por" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Notas</label>
+                            <textarea name="notas" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Registrar</button>
+                        <a href="{% url 'mantenimiento_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

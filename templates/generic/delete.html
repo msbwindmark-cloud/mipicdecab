@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0"><i class="fas fa-trash"></i> Confirmar Eliminación</h3>
+            </div>
+            <div class="card-body text-center">
+                <p class="lead">¿Estás seguro de que deseas eliminar este registro?</p>
+                <p class="text-muted">{{ object }}</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Sí, eliminar</button>
+                    <a href="{{ cancel_url }}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

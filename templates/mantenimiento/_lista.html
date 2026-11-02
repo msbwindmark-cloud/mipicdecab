@@ -1,0 +1,59 @@
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Fecha Reporte</th>
+                <th>Instalación</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Coste</th>
+                <th>Realizado por</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in page_obj %}
+            <tr class="{% if m.vencido %}table-danger{% endif %}">
+                <td>{{ m.fecha_reporte }}</td>
+                <td>{% if m.box %}Box {{ m.box.numero }}{% elif m.pista %}{{ m.pista.nombre }}{% else %}Otro{% endif %}</td>
+                <td>{{ m.get_tipo_display }}</td>
+                <td>{{ m.descripcion|truncatewords:8 }}</td>
+                <td>
+                    {% if m.estado == 'COMPLETADO' %}<span class="badge bg-success">Completado</span>
+                    {% elif m.estado == 'EN_PROGRESO' %}<span class="badge bg-info">En Progreso</span>
+                    {% else %}<span class="badge bg-warning text-dark">Pendiente</span>{% endif %}
+                </td>
+                <td>{{ m.coste }} €</td>
+                <td>{{ m.realizado_por|default:"-" }}</td>
+                <td>
+                    <a href="{% url 'mantenimiento_detail' m.pk %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'mantenimiento_update' m.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'mantenimiento_delete' m.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center text-muted">No se encontraron resultados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if page_obj.has_other_pages %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-target="#lista-mantenimiento" hx-push-url="true">Anterior</a>
+        </li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-target="#lista-mantenimiento" hx-push-url="true">Siguiente</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

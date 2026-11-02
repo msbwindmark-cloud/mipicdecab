@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-graduation-cap"></i> Cursos de Formación</h1>
+    <a href="{% url 'curso_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo Curso</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <input type="text" class="form-control" name="q" placeholder="Buscar por nombre, nivel, instructor..." value="{{ query }}"
+               hx-get="{% url 'curso_list' %}" hx-trigger="keyup changed delay:300ms" hx-target="#lista-cursos" hx-push-url="true">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body" id="lista-cursos">
+        {% include 'cursos/_lista.html' %}
+    </div>
+</div>
+{% endblock %}

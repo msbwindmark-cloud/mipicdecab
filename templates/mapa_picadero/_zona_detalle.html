@@ -1,0 +1,10 @@
+<div>
+    <h6>{{ zona.nombre }} - {{ zona.get_tipo_display }}</h6>
+    <p><strong>Estado:</strong> {{ zona.get_estado_display }}</p>
+    {% if zona.caballo %}
+    <p><strong>Caballo:</strong> <a href="{% url 'caballo_detail' zona.caballo.pk %}">{{ zona.caballo.nombre }}</a></p>
+    {% else %}
+    <p class="text-muted">Sin caballo asignado</p>
+    {% endif %}
+    {% if zona.descripcion %}<p>{{ zona.descripcion }}</p>{% endif %}
+</div>

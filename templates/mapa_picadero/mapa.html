@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-map"></i> Mapa Interactivo del Picadero</h1>
+    <div>
+        <span class="badge bg-success">Libres: {{ libres }}</span>
+        <span class="badge bg-danger">Ocupados: {{ ocupados }}</span>
+        <span class="badge bg-warning text-dark">Limpieza: {{ limpieza }}</span>
+    </div>
+</div>
+<div class="card shadow-sm border-0">
+    <div class="card-body" style="position: relative; height: 600px; background: linear-gradient(180deg, #1f2f1f 0%, #162016 100%); border-radius: 10px;">
+        {% for zona in zonas %}
+        <div style="position: absolute; left: {{ zona.pos_x }}px; top: {{ zona.pos_y }}px; width: {{ zona.ancho }}px; height: {{ zona.alto }}px; background: {% if zona.estado == 'OCUPADO' %}#dc3545{% elif zona.estado == 'LIMPIEZA' %}#ffc107{% elif zona.estado == 'MANTENIMIENTO' %}#6c757d{% else %}#198754{% endif %}; border: 2px solid #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-align: center; color: {% if zona.estado == 'LIMPIEZA' %}#000{% else %}#fff{% endif %}; cursor: pointer; font-weight: bold; font-size: 11px;" onclick="verZona({{ zona.pk }})">
+            {{ zona.nombre }}
+            {% if zona.caballo %}<br><small>{{ zona.caballo.nombre }}</small>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="modal fade" id="zonaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle de Zona</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="zonaDetalle"></div>
+        </div>
+    </div>
+</div>
+<script>
+function verZona(pk){
+    fetch('/mapa/zona/' + pk + '/').then(r => r.text()).then(html => {
+        document.getElementById('zonaDetalle').innerHTML = html;
+        new bootstrap.Modal(document.getElementById('zonaModal')).show();
+    });
+}
+</script>
+{% endblock %}

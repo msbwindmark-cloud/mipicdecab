@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1><i class="fas fa-chart-line text-success"></i> Progreso Físico - {{ caballo.nombre }}</h1>
+        <p class="text-muted mb-0">Evolución, peso, condición corporal y tono muscular</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'caballo_detail' caballo.pk %}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i> Volver a la ficha</a>
+        <a href="{% url 'seguimiento_create' caballo.pk %}" class="btn btn-success"><i class="fas fa-plus"></i> Nuevo Registro</a>
+    </div>
+</div>
+
+{% if ultimo %}
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card text-bg-primary shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-weight fa-2x mb-2"></i>
+                <h6 class="mb-1">Peso Actual</h6>
+                <h2 class="mb-0">{{ ultimo.peso_kg }} kg</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-info shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-ruler-horizontal fa-2x mb-2"></i>
+                <h6 class="mb-1">Condición Corporal</h6>
+                <h2 class="mb-0">{{ ultimo.condicion_corporal }} / 5</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-warning shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-dumbbell fa-2x mb-2"></i>
+                <h6 class="mb-1">Tono Muscular</h6>
+                <h2 class="mb-0">{{ ultimo.tono_muscular }} / 5</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card {% if evolucion >= 0 %}text-bg-success{% else %}text-bg-danger{% endif %} shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-chart-line fa-2x mb-2"></i>
+                <h6 class="mb-1">Evolución Total</h6>
+                <h2 class="mb-0">{% if evolucion >= 0 %}+{% endif %}{{ evolucion }} kg</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-chart-area"></i> Evolución Gráfica</h5>
+        <small>Seguimiento desde primeras mediciones</small>
+    </div>
+    <div class="card-body">
+        <canvas id="graficoFisico" height="110"></canvas>
+    </div>
+</div>
+{% endif %}
+
+<div class="card shadow-sm border-0">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-history text-success"></i> Historial Completo</h5>
+        <span class="badge bg-success">{{ registros.count }} registro{{ registros.count|pluralize }}</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Peso (kg)</th>
+                        <th>Condición Corporal</th>
+                        <th>Tono Muscular</th>
+                        <th>Estado</th>
+                        <th>Observaciones</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in registros %}
+                    <tr>
+                        <td><strong>{{ r.fecha|date:"d/m/Y" }}</strong></td>
+                        <td><span class="badge bg-primary">{{ r.peso_kg }} kg</span></td>
+                        <td>{{ r.condicion_corporal }} / 5</td>
+                        <td>{{ r.tono_muscular }} / 5</td>
+                        <td><span class="badge bg-success">{{ r.get_estado_display }}</span></td>
+                        <td>{{ r.observaciones|default:"-"|truncatewords:12 }}</td>
+                        <td class="text-center">
+                            <form method="post" action="{% url 'seguimiento_delete' r.pk %}" style="display:inline">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Seguro que quieres eliminar este registro físico?')"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                            <h5>Aún no hay registros físicos</h5>
+                            <p class="text-muted">Empieza hoy y ve cómo evoluciona {{ caballo.nombre }} semana a semana</p>
+                            <a href="{% url 'seguimiento_create' caballo.pk %}" class="btn btn-success"><i class="fas fa-plus"></i> Crear primer registro</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('graficoFisico');
+    if (ctx && {{ pesos|safe }}.length > 0) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ fechas|safe }},
+                datasets: [
+                    {
+                        label: 'Peso (kg)',
+                        data: {{ pesos|safe }},
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13,110,253,0.12)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    },
+                    {
+                        label: 'Condición Corporal (/5)',
+                        data: {{ cc|safe }},
+                        borderColor: '#198754',
+                        tension: 0.4,
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Tono Muscular (/5)',
+                        data: {{ musculo|safe }},
+                        borderColor: '#ffc107',
+                        tension: 0.4,
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Evolución Física - {{ caballo.nombre }}' }
+                },
+                scales: {
+                    y: { beginAtZero: false }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

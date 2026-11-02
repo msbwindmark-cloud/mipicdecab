@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-stethoscope"></i> Visitas Veterinarias</h1>
+    <a href="{% url 'visita_programar' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Programar Visita</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <input type="text" class="form-control" name="q" placeholder="Buscar por caballo, veterinario, motivo..." value="{{ query }}"
+               hx-get="{% url 'visita_list' %}" hx-trigger="keyup changed delay:300ms" hx-target="#lista-visitas-vet" hx-push-url="true">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body" id="lista-visitas-vet">
+        {% include 'visitas_vet/_lista.html' %}
+    </div>
+</div>
+{% endblock %}

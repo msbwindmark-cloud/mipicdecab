@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-chalkboard-teacher"></i> Clases de Equitación</h1>
+    <a href="{% url 'clase_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nueva Clase</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Instructor</th>
+                        <th>Pista</th>
+                        <th>Nivel</th>
+                        <th>Plazas</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for clase in clases %}
+                    <tr>
+                        <td>{{ clase.fecha }}</td>
+                        <td>{{ clase.hora_inicio }} - {{ clase.hora_fin }}</td>
+                        <td>{{ clase.instructor }}</td>
+                        <td>{{ clase.pista }}</td>
+                        <td>{{ clase.get_nivel_display }}</td>
+                        <td>{{ clase.plazas }}</td>
+                        <td>{{ clase.precio }} €</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No hay clases registradas</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-calculator"></i> Liquidación Mensual</h1>
+    <form method="get" class="d-flex gap-2">
+        <select name="month" class="form-select" style="width:auto;">
+            {% for i in "123456789"|make_list %}
+            <option value="{{ forloop.counter }}" {% if forloop.counter == month %}selected{% endif %}>{{ forloop.counter }}</option>
+            {% endfor %}
+        </select>
+        <select name="year" class="form-select" style="width:auto;">
+            <option value="2026" {% if year == 2026 %}selected{% endif %}>2026</option>
+            <option value="2025" {% if year == 2025 %}selected{% endif %}>2025</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Ver</button>
+    </form>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card text-bg-success">
+            <div class="card-body">
+                <h6 class="card-title">Ingresos</h6>
+                <h3>{{ ingresos }} €</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-danger">
+            <div class="card-body">
+                <h6 class="card-title">Gastos</h6>
+                <h3>{{ gastos }} €</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <h6 class="card-title">Saldo</h6>
+                <h3>{{ saldo }} €</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Resumen por Categoría</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Tipo</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in por_categoria %}
+                    <tr>
+                        <td>{{ item.categoria }}</td>
+                        <td>{% if item.tipo == 'INGRESO' %}<span class="badge bg-success">Ingreso</span>{% else %}<span class="badge bg-danger">Gasto</span>{% endif %}</td>
+                        <td>{{ item.total }} €</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">Sin movimientos este mes</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Movimientos del Mes</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Tipo</th>
+                        <th>Categoría</th>
+                        <th>Concepto</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mov in movimientos %}
+                    <tr>
+                        <td>{{ mov.fecha }}</td>
+                        <td>{% if mov.tipo == 'INGRESO' %}<span class="badge bg-success">Ingreso</span>{% else %}<span class="badge bg-danger">Gasto</span>{% endif %}</td>
+                        <td>{{ mov.get_categoria_display }}</td>
+                        <td>{{ mov.concepto }}</td>
+                        <td class="{% if mov.tipo == 'INGRESO' %}text-success{% else %}text-danger{% endif %}">
+                            {% if mov.tipo == 'INGRESO' %}+{% else %}-{% endif %}{{ mov.importe }} €
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Sin movimientos</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

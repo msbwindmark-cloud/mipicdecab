@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0"><i class="fas fa-hammer"></i> Programar Visita de Herrador</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Caballo</label>
+                            <select name="caballo" class="form-select" required>
+                                {% for c in caballos %}
+                                <option value="{{ c.pk }}">{{ c.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Herrador</label>
+                            <input type="text" name="herrador" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select">
+                                <option value="HERRAJE_COMPLETO">Herraje Completo</option>
+                                <option value="RETOQUE">Retoque</option>
+                                <option value="DESHERRAJE">Desherraje</option>
+                                <option value="CORRECCION">Corrección</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha Programada</label>
+                            <input type="date" name="fecha_programada" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Coste (€)</label>
+                            <input type="number" name="coste" class="form-control" step="0.01" value="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tipo Herradura</label>
+                            <input type="text" name="tipo_herradura" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Próximo Herraje</label>
+                            <input type="date" name="proximo_herraje" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Notas</label>
+                            <textarea name="notas" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Programar</button>
+                        <a href="{% url 'herraje_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

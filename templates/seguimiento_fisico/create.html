@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1><i class="fas fa-weight text-success"></i> Nuevo Registro Físico</h1>
+        <p class="text-muted mb-0">Añadiendo seguimiento a: <strong>{{ caballo.nombre }}</strong></p>
+    </div>
+    <a href="{% url 'seguimiento_list' caballo.pk %}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i> Volver al seguimiento</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-heartbeat"></i> Datos de Medición</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Fecha de medición *</label>
+                            <input type="date" name="fecha" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Peso (kg) *</label>
+                            <input type="number" step="0.01" min="0" name="peso_kg" class="form-control" placeholder="Ej: 550.50" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Condición Corporal (1 - 5) *</label>
+                            <select name="condicion_corporal" class="form-select" required>
+                                <option value="1">1 - Muy delgado</option>
+                                <option value="2">2 - Delgado</option>
+                                <option value="3" selected>3 - Óptimo</option>
+                                <option value="4">4 - Robusto / Bien cubierto</option>
+                                <option value="5">5 - Graso / Sobrecubierto</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Tono Muscular (1 - 5) *</label>
+                            <select name="tono_muscular" class="form-select" required>
+                                <option value="1">1 - Flojo</option>
+                                <option value="2">2 - Poco desarrollado</option>
+                                <option value="3" selected>3 - Bien trabajado</option>
+                                <option value="4">4 - Muy tonificado</option>
+                                <option value="5">5 - Atlético / Excelente</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Estado General *</label>
+                            <select name="estado" class="form-select" required>
+                                <option value="OPTIMO">Óptimo</option>
+                                <option value="BUENO" selected>Bueno</option>
+                                <option value="MEJORABLE">Mejorable</option>
+                                <option value="CUIDADO">Necesita Cuidado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Foto del caballo (URL opcional)</label>
+                            <input type="url" name="foto" class="form-control" placeholder="https://ejemplo.com/foto.jpg">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Observaciones</label>
+                            <textarea name="observaciones" class="form-control" rows="4" placeholder="Alimentación, tipo de trabajo, sensaciones, cambios observados..."></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex justify-content-end gap-2">
+                        <a href="{% url 'seguimiento_list' caballo.pk %}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button class="btn btn-success"><i class="fas fa-save"></i> Guardar Registro Físico</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

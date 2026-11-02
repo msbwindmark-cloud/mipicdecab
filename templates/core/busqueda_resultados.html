@@ -1,0 +1,9 @@
+{% for r in resultados %}
+<a href="{{ r.url }}" class="list-group-item list-group-item-action">
+    <span class="badge bg-secondary">{{ r.tipo }}</span> {{ r.nombre }}
+</a>
+{% empty %}
+{% if query %}
+<div class="list-group-item text-muted">Sin resultados</div>
+{% endif %}
+{% endfor %}

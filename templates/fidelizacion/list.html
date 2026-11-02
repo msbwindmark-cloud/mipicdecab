@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-star"></i> Fidelización de Clientes</h1>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card mb-3">
+            <div class="card-body">
+                <input type="text" class="form-control" name="q" placeholder="Buscar por propietario..." value="{{ query }}"
+                       hx-get="{% url 'fidelizacion_list' %}" hx-trigger="keyup changed delay:300ms" hx-target="#lista-fidelizacion" hx-push-url="true">
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">Puntos por Propietario</h5>
+            </div>
+            <div class="card-body" id="lista-fidelizacion">
+                {% include 'fidelizacion/_lista.html' %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Recompensas Disponibles</h5>
+            </div>
+            <div class="card-body">
+                {% for r in recompensas %}
+                <div class="card mb-2">
+                    <div class="card-body p-2">
+                        <strong>{{ r.nombre }}</strong><br>
+                        <small>{{ r.descripcion }}</small><br>
+                        <span class="badge bg-warning text-dark">{{ r.puntos_necesarios }} pts</span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No hay recompensas</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-weight"></i> Control de Peso - {{ caballo.nombre }}</h1>
+    <a href="{% url 'caballo_detail' caballo.pk %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Volver</a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Registrar Peso</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" class="row g-3">
+            {% csrf_token %}
+            <div class="col-md-3">
+                <label class="form-label">Peso (kg)</label>
+                <input type="number" name="peso" class="form-control" step="0.01" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Condición Corporal</label>
+                <select name="condicion_corporal" class="form-select">
+                    <option value="MUY_DELGADO">Muy Delgado</option>
+                    <option value="DELGADO">Delgado</option>
+                    <option value="IDEAL" selected>Ideal</option>
+                    <option value="SOBREPESO">Sobrepeso</option>
+                    <option value="OBESO">Obeso</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Notas</label>
+                <input type="text" name="notas" class="form-control">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-100"><i class="fas fa-save"></i> Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Historial de Peso</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Peso (kg)</th>
+                        <th>Condición Corporal</th>
+                        <th>Notas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for peso in pesos %}
+                    <tr>
+                        <td>{{ peso.fecha }}</td>
+                        <td><strong>{{ peso.peso }}</strong> kg</td>
+                        <td>
+                            {% if peso.condicion_corporal == 'IDEAL' %}<span class="badge bg-success">Ideal</span>
+                            {% elif peso.condicion_corporal == 'DELGADO' %}<span class="badge bg-warning text-dark">Delgado</span>
+                            {% elif peso.condicion_corporal == 'MUY_DELGADO' %}<span class="badge bg-danger">Muy Delgado</span>
+                            {% elif peso.condicion_corporal == 'SOBREPESO' %}<span class="badge bg-warning">Sobrepeso</span>
+                            {% else %}<span class="badge bg-danger">Obeso</span>{% endif %}
+                        </td>
+                        <td>{{ peso.notas|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Sin registros de peso</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

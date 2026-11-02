@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-trophy text-warning"></i> Ranking del Picadero</h1>
+</div>
+<div class="row g-4 mb-4">
+    {% for u in top3 %}
+    <div class="col-md-4">
+        <div class="card text-center {% if forloop.first %}border-warning{% elif forloop.second %}border-secondary{% else %}border-bronze{% endif %}">
+            <div class="card-body">
+                <h2>{% if forloop.first %}🥇{% elif forloop.second %}🥈{% else %}🥉{% endif %}</h2>
+                <h4>{{ u.username }}</h4>
+                <h3>{{ u.num_logros }} logros</h3>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="card">
+    <div class="card-header"><h5 class="mb-0">Clasificación General</h5></div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark"><tr><th>#</th><th>Usuario</th><th>Logros</th></tr></thead>
+            <tbody>
+                {% for u in usuarios %}
+                <tr><td>{{ forloop.counter }}</td><td>{{ u.username }}</td><td>{{ u.num_logros }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

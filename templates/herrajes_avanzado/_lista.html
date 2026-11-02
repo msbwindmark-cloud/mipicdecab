@@ -1,0 +1,68 @@
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Caballo</th>
+                <th>Herrador</th>
+                <th>Tipo</th>
+                <th>Fecha Programada</th>
+                <th>Fecha Realizada</th>
+                <th>Tipo Herradura</th>
+                <th>Coste</th>
+                <th>Proximo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in page_obj %}
+            <tr class="{% if v.vencida %}table-danger{% elif v.pendiente %}table-warning{% endif %}">
+                <td><strong>{{ v.caballo.nombre }}</strong></td>
+                <td>{{ v.herrador }}</td>
+                <td>{{ v.get_tipo_display }}</td>
+                <td>{{ v.fecha_programada }}</td>
+                <td>{{ v.fecha_realizada|default:"-" }}</td>
+                <td>{{ v.tipo_herradura|default:"-" }}</td>
+                <td>{{ v.coste }} €</td>
+                <td>{{ v.proximo_herraje|default:"-" }}</td>
+                <td>
+                    {% if v.estado == 'REALIZADA' %}<span class="badge bg-success">Realizada</span>
+                    {% elif v.estado == 'PROGRAMADA' %}<span class="badge bg-warning text-dark">Programada</span>
+                    {% else %}<span class="badge bg-secondary">Cancelada</span>{% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'herraje_detail' v.pk %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'herraje_update' v.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'herraje_delete' v.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10" class="text-center text-muted">No se encontraron resultados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if page_obj.has_other_pages %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}"
+               hx-get="?q={{ query }}&page={{ page_obj.previous_page_number }}"
+               hx-target="#lista-herrajes-avanzado" hx-push-url="true">Anterior</a>
+        </li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}"
+               hx-get="?q={{ query }}&page={{ page_obj.next_page_number }}"
+               hx-target="#lista-herrajes-avanzado" hx-push-url="true">Siguiente</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

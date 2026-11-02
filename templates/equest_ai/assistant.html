@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-robot"></i> Equest AI - Asistente Inteligente</h1>
+</div>
+<div class="card">
+    <div class="card-body" style="height: 400px; overflow-y: auto;" id="chatAi">
+        <div class="mb-2"><span class="badge bg-primary">Equest AI</span> Hola! Pregúntame cosas sobre el picadero.</div>
+    </div>
+    <div class="card-footer">
+        <div class="input-group">
+            <input type="text" id="preguntaAi" class="form-control" placeholder="Pregunta algo...">
+            <button class="btn btn-primary" onclick="preguntarAi()"><i class="fas fa-paper-plane"></i> Enviar</button>
+        </div>
+    </div>
+</div>
+<script>
+function preguntarAi(){
+    const input = document.getElementById('preguntaAi');
+    const pregunta = input.value;
+    if(!pregunta) return;
+    document.getElementById('chatAi').innerHTML += '<div class="mb-2 text-end"><span class="badge bg-success">Tú</span> ' + pregunta + '</div>';
+    fetch('/equest-ai/responder/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}'},
+        body: JSON.stringify({pregunta: pregunta})
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('chatAi').innerHTML += '<div class="mb-2"><span class="badge bg-primary">Equest AI</span> ' + data.respuesta + '</div>';
+        input.value = '';
+        document.getElementById('chatAi').scrollTop = document.getElementById('chatAi').scrollHeight;
+    });
+}
+</script>
+{% endblock %}

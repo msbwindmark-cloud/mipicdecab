@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EcuestreManager - Gestion del Picadero</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: #10150d; color: #e9ecef; font-family: 'Segoe UI', Arial, sans-serif; }
+        .hero {
+            background: linear-gradient(135deg, #14532d 0%, #166534 45%, #052e16 100%);
+            padding: 130px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(134,239,172,0.25), transparent 70%);
+            border-radius: 50%;
+        }
+        .hero h1 { font-size: 4.5rem; font-weight: 900; color: #bbf7d0; text-shadow: 0 6px 30px rgba(0,0,0,0.6); }
+        .hero p { font-size: 1.5rem; color: #d1fae5; }
+        .btn-cta {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none;
+            color: #052e16;
+            font-weight: 800;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 40px rgba(34,197,94,0.45);
+        }
+        .btn-cta:hover { color: #fff; transform: translateY(-2px); }
+        .btn-ghost {
+            border: 2px solid #86efac;
+            color: #bbf7d0;
+            background: transparent;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .stats-card { background: #18281c; border: 1px solid #2d4433; border-radius: 20px; }
+        .feature-card { background: #18281c; border: 1px solid #2d4433; border-radius: 20px; height: 100%; }
+        .feature-card .icon { font-size: 2.5rem; }
+        footer { padding: 40px 0; text-align: center; color: #8fae97; }
+        .counter { font-size: 3.5rem; font-weight: 900; color: #4ade80; }
+    </style>
+</head>
+<body>
+    <section class="hero text-center">
+        <div class="container">
+            <h1>🐎 EcuestreManager</h1>
+            <p>La gestión que tu caballo merece</p>
+            <p class="mt-3" style="max-width: 700px; margin: 0 auto; color: #a7f3d0;">Todo el picadero en un solo lugar: fichas, salud, facturación, reservas, entrenamientos y mucho más.</p>
+            <div class="mt-4">
+                <a href="/accounts/login/" class="btn btn-cta"><i class="fas fa-horse"></i> Acceder al Panel Privado</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="container py-5">
+        <div class="row g-4 text-center">
+            <div class="col-md-3">
+                <div class="card stats-card p-4">
+                    <div class="counter" data-target="{{ total_caballos }}">0</div>
+                    <p class="mb-0 text-white-50">Caballos gestionados</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card p-4">
+                    <div class="counter" data-target="{{ total_propietarios }}">0</div>
+                    <p class="mb-0 text-white-50">Propietarios</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card p-4">
+                    <div class="counter" data-target="{{ facturas_pendientes }}">0</div>
+                    <p class="mb-0 text-white-50">Facturas Pendientes</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card p-4">
+                    <div class="counter" data-target="{{ ingresos }}">0</div>
+                    <p class="mb-0 text-white-50">Ingresos (€)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container py-5">
+        <h2 class="text-center mb-4" style="color: #bbf7d0;">Todo el picadero en un solo lugar</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card p-4 text-center">
+                    <div class="icon"><i class="fas fa-horse"></i></div>
+                    <h5>Fichas de Caballo</h5>
+                    <p class="text-white-50">Microchip, UELN, raza, dieta, galería, QR.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card p-4 text-center">
+                    <div class="icon"><i class="fas fa-stethoscope"></i></div>
+                    <h5>Salud y Veterinaria</h5>
+                    <p class="text-white-50">Vacunas, desparasitaciones, herrajes, revisiones.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card p-4 text-center">
+                    <div class="icon"><i class="fas fa-money-bill-wave"></i></div>
+                    <h5>Facturación</h5>
+                    <p class="text-white-50">PDF profesional, cobros, morosos, recurrentes.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card p-4 text-center">
+                    <div class="icon"><i class="fas fa-calendar-check"></i></div>
+                    <h5>Reservas y Entrenamientos</h5>
+                    <p class="text-white-50">Calendario de pistas y plan de entrenamiento.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card p-4 text-center">
+                    <div class="icon"><i class="fas fa-boxes"></i></div>
+                    <h5>Stock y Cajas</h5>
+                    <p class="text-white-50">Inventario, ocupación de boxes, alertas.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card p-4 text-center">
+                    <div class="icon"><i class="fas fa-trophy"></i></div>
+                    <h5>Logros y Reportes</h5>
+                    <p class="text-white-50">Gamificación, informes semanales y simulador.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-5">
+        <p class="text-white-50 mb-2">🐎 EcuestreManager — La gestión que tu caballo merece</p>
+        <a href="/accounts/login/" class="btn btn-ghost">Acceder al Panel Privado</a>
+    </footer>
+
+    <script>
+        function animarContador(el) {
+            const target = parseInt(el.getAttribute('data-target')) || 0;
+            const duracion = 2000;
+            const start = null;
+            function paso(t) {
+                if (start === null) start = t;
+                const progreso = Math.min((t - start) / duracion, 1);
+                const valor = Math.floor(target * (1 - Math.pow(1 - progreso, 3)));
+                el.textContent = valor;
+                if (progreso < 1) requestAnimationFrame(paso);
+                else el.textContent = target;
+            }
+            requestAnimationFrame(paso);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.counter').forEach(function(el) { animarContador(el); });
+        });
+    </script>
+</body>
+</html>
