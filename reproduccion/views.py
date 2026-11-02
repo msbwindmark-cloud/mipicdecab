@@ -12,7 +12,7 @@ from propietarios.models import Propietario
 @login_required
 def reproduccion_list(request):
     query = request.GET.get('q', '')
-    reproducciones = Reproduccion.objects.select_related('yegua', 'semental', 'poto').order_by('-id')
+    reproducciones = Reproduccion.objects.select_related('yegua', 'semental', 'potro').order_by('-id')
     if query:
         reproducciones = reproducciones.filter(
             Q(yegua__nombre__icontains=query) |

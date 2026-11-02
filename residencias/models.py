@@ -42,7 +42,8 @@ class Residencia(models.Model):
     
     @property
     def coste_total(self):
-        meses = self.dias_residencia / 30
+        from decimal import Decimal
+        meses = Decimal(self.dias_residencia) / Decimal(30)
         return round(self.tarifa_mensual * meses, 2)
     
     @property
