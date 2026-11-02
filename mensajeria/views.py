@@ -17,7 +17,7 @@ def mensajeria_list(request):
         conversaciones = conversaciones.filter(
             Q(mensajes__contenido__icontains=query)
         ).distinct()
-    paginator = Paginator(conversaciones, 5)
+    paginator = Paginator(conversaciones, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
@@ -71,7 +71,7 @@ def mensaje_list(request):
     mensajes = Mensaje.objects.filter(conversacion__participantes=request.user).select_related('conversacion', 'autor').order_by('-fecha')
     if query:
         mensajes = mensajes.filter(Q(contenido__icontains=query))
-    paginator = Paginator(mensajes, 5)
+    paginator = Paginator(mensajes, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'mensajeria/mensajes.html', {'page_obj': page_obj, 'query': query, 'mensajes': mensajes})

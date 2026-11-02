@@ -19,7 +19,7 @@ def venta_list(request):
             Q(estado__icontains=query) |
             Q(descripcion__icontains=query)
         )
-    paginator = Paginator(ventas, 5)
+    paginator = Paginator(ventas, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

@@ -33,7 +33,7 @@
                         <td>{{ mov.get_categoria_display }}</td>
                         <td>{{ mov.concepto }}</td>
                         <td class="{% if mov.tipo == 'INGRESO' %}text-success{% else %}text-danger{% endif %}">
-                            {% if mov.tipo == 'INGRESO' %}+{% else %}-{% endif %}{{ mov.importe }} €
+                            {% if mov.tipo == 'INGRESO' %}+{% else %}-{% endif %}{{ mov.importe|floatformat:2 }} €
                         </td>
                         <td>{{ mov.get_forma_pago_display }}</td>
                     </tr>

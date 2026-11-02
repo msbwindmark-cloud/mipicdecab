@@ -29,7 +29,7 @@
                         <td>{{ clase.pista }}</td>
                         <td>{{ clase.get_nivel_display }}</td>
                         <td>{{ clase.plazas }}</td>
-                        <td>{{ clase.precio }} €</td>
+                        <td>{{ clase.precio|floatformat:2 }} €</td>
                     </tr>
                     {% empty %}
                     <tr>

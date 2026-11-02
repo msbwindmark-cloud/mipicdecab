@@ -17,7 +17,7 @@ def consumo_list(request):
             Q(proveedor__icontains=query) |
             Q(notas__icontains=query)
         )
-    paginator = Paginator(consumos, 5)
+    paginator = Paginator(consumos, request.GET.get("per_page", 5))
     page_obj = paginator.get_page(request.GET.get('page'))
     total = consumos.aggregate(total=Sum('importe'))['total'] or 0
 

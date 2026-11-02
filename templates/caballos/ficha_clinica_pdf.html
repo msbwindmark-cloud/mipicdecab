@@ -45,7 +45,7 @@
                     <td>{{ e.get_tipo_display }}</td>
                     <td>{{ e.descripcion }}</td>
                     <td>{{ e.proxima_fecha|default:"-" }}</td>
-                    <td>{{ e.coste }} €</td>
+                    <td>{{ e.coste|floatformat:2 }} €</td>
                 </tr>
                 {% empty %}
                 <tr><td colspan="5" style="text-align:center;">Sin registros</td></tr>
@@ -67,7 +67,7 @@
                     <td>{{ h.herrador|default:"-" }}</td>
                     <td>{{ h.notas|default:"-" }}</td>
                     <td>{{ h.proximo_herraje|default:"-" }}</td>
-                    <td>{{ h.coste }} €</td>
+                    <td>{{ h.coste|floatformat:2 }} €</td>
                 </tr>
                 {% empty %}
                 <tr><td colspan="5" style="text-align:center;">Sin registros</td></tr>

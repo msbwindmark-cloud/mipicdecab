@@ -69,7 +69,7 @@ def propietario_list(request):
             Q(telefono__icontains=query) |
             Q(email__icontains=query)
         )
-    paginator = Paginator(propietarios, 5)
+    paginator = Paginator(propietarios, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

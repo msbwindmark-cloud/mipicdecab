@@ -4,6 +4,18 @@
     <div class="col-12">
         <h1><i class="fas fa-tachometer-alt"></i> Dashboard - EcuestreManager</h1>
         <p class="text-muted">Gestión integral del picadero</p>
+    <div class="d-flex gap-2 mb-3">
+        {% if user.is_superuser %}
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <i class="fas fa-cog"></i> Panel Admin
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/admin/" target="_blank"><i class="fas fa-external-link-alt"></i> Abrir en nueva ventana</a></li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
     </div>
 </div>
 
@@ -159,7 +171,7 @@
                 <div class="d-flex justify-content-between">
                     <div>
                         <h6 class="card-title">Ingresos</h6>
-                        <h3>{{ ingresos }} €</h3>
+                        <h3>{{ ingresos|floatformat:2 }} €</h3>
                     </div>
                     <i class="fas fa-arrow-up fa-2x"></i>
                 </div>
@@ -172,7 +184,7 @@
                 <div class="d-flex justify-content-between">
                     <div>
                         <h6 class="card-title">Gastos</h6>
-                        <h3>{{ gastos }} €</h3>
+                        <h3>{{ gastos|floatformat:2 }} €</h3>
                     </div>
                     <i class="fas fa-arrow-down fa-2x"></i>
                 </div>
@@ -185,7 +197,7 @@
                 <div class="d-flex justify-content-between">
                     <div>
                         <h6 class="card-title">Saldo</h6>
-                        <h3>{{ saldo }} €</h3>
+                        <h3>{{ saldo|floatformat:2 }} €</h3>
                     </div>
                     <i class="fas fa-wallet fa-2x"></i>
                 </div>

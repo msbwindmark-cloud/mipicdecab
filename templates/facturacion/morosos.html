@@ -26,10 +26,10 @@
                         <td>{{ m.propietario.dni_cif }}</td>
                         <td>{{ m.propietario.telefono }}</td>
                         <td>{{ m.propietario.email }}</td>
-                        <td class="text-danger fw-bold">{{ m.deuda }} €</td>
+                        <td class="text-danger fw-bold">{{ m.deuda|floatformat:2 }} €</td>
                         <td>
                             <a href="{% url 'propietario_detail' m.propietario.pk %}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                            <a href="https://wa.me/{{ m.propietario.telefono|cut:' ' }}?text=Hola%20{{ m.propietario.nombre }},%20tienes%20pendiente%20de%20pago%20{{ m.deuda }}€" class="btn btn-sm btn-success" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                            <a href="https://wa.me/{{ m.propietario.telefono|cut:' ' }}?text=Hola%20{{ m.propietario.nombre }},%20tienes%20pendiente%20de%20pago%20{{ m.deuda|floatformat:2 }}€" class="btn btn-sm btn-success" target="_blank"><i class="fab fa-whatsapp"></i></a>
                         </td>
                     </tr>
                     {% empty %}

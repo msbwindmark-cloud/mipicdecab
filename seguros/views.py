@@ -19,7 +19,7 @@ def seguro_list(request):
             Q(numero_poliza__icontains=query) |
             Q(tipo__icontains=query)
         )
-    paginator = Paginator(seguros, 5)
+    paginator = Paginator(seguros, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

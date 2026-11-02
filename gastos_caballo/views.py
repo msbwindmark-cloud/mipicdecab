@@ -20,7 +20,7 @@ def gasto_list(request):
             Q(proveedor__icontains=query)
         )
     total = gastos.aggregate(total=Sum('importe'))['total'] or 0
-    paginator = Paginator(gastos, 5)
+    paginator = Paginator(gastos, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

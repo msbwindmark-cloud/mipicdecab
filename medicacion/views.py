@@ -20,7 +20,7 @@ def medicacion_list(request):
             Q(motivo__icontains=query) |
             Q(veterinario__icontains=query)
         )
-    paginator = Paginator(tratamientos, 5)
+    paginator = Paginator(tratamientos, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

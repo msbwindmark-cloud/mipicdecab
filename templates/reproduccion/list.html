@@ -12,6 +12,18 @@
     </div>
 </div>
 
+<div class="d-flex justify-content-end mb-2">
+  <form method="get" class="d-flex align-items-center gap-2">
+    <input type="hidden" name="q" value="{{ query }}">
+    <label class="small text-muted">Por página:</label>
+    <select name="per_page" class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+      <option value="5" {% if not request.GET.per_page or request.GET.per_page == '5' %}selected{% endif %}>5</option>
+      <option value="10" {% if request.GET.per_page == '10' %}selected{% endif %}>10</option>
+      <option value="25" {% if request.GET.per_page == '25' %}selected{% endif %}>25</option>
+      <option value="50" {% if request.GET.per_page == '50' %}selected{% endif %}>50</option>
+    </select>
+  </form>
+</div>
 <div class="card">
     <div class="card-body" id="lista-reproduccion">
         {% include 'reproduccion/_lista.html' %}

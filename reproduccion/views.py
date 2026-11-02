@@ -20,7 +20,7 @@ def reproduccion_list(request):
             Q(tipo__icontains=query) |
             Q(estado__icontains=query)
         )
-    paginator = Paginator(reproducciones, 5)
+    paginator = Paginator(reproducciones, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

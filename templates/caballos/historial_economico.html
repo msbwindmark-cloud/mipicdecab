@@ -31,10 +31,10 @@
                         <td>{{ factura.fecha_emision }}</td>
                         <td>
                             {% for concepto in factura.conceptos.all %}
-                            {{ concepto.descripcion }} ({{ concepto.cantidad }}x{{ concepto.precio_unitario }}€)<br>
+                            {{ concepto.descripcion }} ({{ concepto.cantidad }}x{{ concepto.precio_unitario|floatformat:2 }}€)<br>
                             {% endfor %}
                         </td>
-                        <td>{{ factura.total }} €</td>
+                        <td>{{ factura.total|floatformat:2 }} €</td>
                         <td>
                             {% if factura.estado == 'PAGADO' %}<span class="badge bg-success">Pagado</span>
                             {% elif factura.estado == 'PENDIENTE' %}<span class="badge bg-warning text-dark">Pendiente</span>

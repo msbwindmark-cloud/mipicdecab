@@ -19,7 +19,7 @@ def mantenimiento_list(request):
             Q(realizado_por__icontains=query) |
             Q(box__numero__icontains=query)
         )
-    paginator = Paginator(mantenimientos, 5)
+    paginator = Paginator(mantenimientos, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

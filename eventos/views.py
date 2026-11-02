@@ -17,7 +17,7 @@ def evento_list(request):
             Q(tipo__icontains=query) |
             Q(lugar__icontains=query)
         )
-    paginator = Paginator(eventos, 5)
+    paginator = Paginator(eventos, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

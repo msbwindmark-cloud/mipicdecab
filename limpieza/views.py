@@ -18,7 +18,7 @@ def limpieza_list(request):
             Q(tipo__icontains=query) |
             Q(realizada_por__icontains=query)
         )
-    paginator = Paginator(limpiezas, 5)
+    paginator = Paginator(limpiezas, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

@@ -49,15 +49,15 @@
             <tr>
                 <td>{{ concepto.descripcion }}</td>
                 <td>{{ concepto.cantidad }}</td>
-                <td>{{ concepto.precio_unitario }} €</td>
-                <td>{{ concepto.subtotal }} €</td>
+                <td>{{ concepto.precio_unitario|floatformat:2 }} €</td>
+                <td>{{ concepto.subtotal|floatformat:2 }} €</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     
     <div class="total">
-        TOTAL: {{ factura.total }} €
+        TOTAL: {{ factura.total|floatformat:2 }} €
     </div>
     
     <div class="footer">

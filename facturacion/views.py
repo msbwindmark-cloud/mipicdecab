@@ -86,7 +86,7 @@ def factura_list(request):
             Q(propietario__apellidos__icontains=query) |
             Q(estado__icontains=query)
         )
-    paginator = Paginator(facturas, 5)
+    paginator = Paginator(facturas, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

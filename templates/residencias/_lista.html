@@ -22,9 +22,9 @@
                 <td>{{ r.get_tipo_display }}</td>
                 <td>{{ r.fecha_inicio }}</td>
                 <td>{{ r.fecha_fin|default:"-" }}</td>
-                <td>{{ r.tarifa_mensual }} €</td>
+                <td>{{ r.tarifa_mensual|floatformat:2 }} €</td>
                 <td>{{ r.dias_residencia }}</td>
-                <td>{{ r.coste_total }} €</td>
+                <td>{{ r.coste_total|floatformat:2 }} €</td>
                 <td>
                     {% if r.estado == 'ACTIVA' %}<span class="badge bg-success">Activa</span>
                     {% elif r.estado == 'FINALIZADA' %}<span class="badge bg-secondary">Finalizada</span>
@@ -50,16 +50,16 @@
     <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}"
-               hx-get="?q={{ query }}&page={{ page_obj.previous_page_number }}"
+            <a class="page-link" href="?q={{ query }}&per_page={{ request.GET.per_page|default:5 }}&page={{ page_obj.previous_page_number }}"
+               hx-get="?q={{ query }}&per_page={{ request.GET.per_page|default:5 }}&page={{ page_obj.previous_page_number }}"
                hx-target="#lista-residencias" hx-push-url="true">Anterior</a>
         </li>
         {% endif %}
         <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
         {% if page_obj.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}"
-               hx-get="?q={{ query }}&page={{ page_obj.next_page_number }}"
+            <a class="page-link" href="?q={{ query }}&per_page={{ request.GET.per_page|default:5 }}&page={{ page_obj.next_page_number }}"
+               hx-get="?q={{ query }}&per_page={{ request.GET.per_page|default:5 }}&page={{ page_obj.next_page_number }}"
                hx-target="#lista-residencias" hx-push-url="true">Siguiente</a>
         </li>
         {% endif %}

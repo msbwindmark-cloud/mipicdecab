@@ -21,7 +21,7 @@
         <div class="card text-bg-success">
             <div class="card-body">
                 <h6 class="card-title">Ingresos</h6>
-                <h3>{{ ingresos }} €</h3>
+                <h3>{{ ingresos|floatformat:2 }} €</h3>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
         <div class="card text-bg-danger">
             <div class="card-body">
                 <h6 class="card-title">Gastos</h6>
-                <h3>{{ gastos }} €</h3>
+                <h3>{{ gastos|floatformat:2 }} €</h3>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
         <div class="card text-bg-primary">
             <div class="card-body">
                 <h6 class="card-title">Saldo</h6>
-                <h3>{{ saldo }} €</h3>
+                <h3>{{ saldo|floatformat:2 }} €</h3>
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@
                     <tr>
                         <td>{{ item.categoria }}</td>
                         <td>{% if item.tipo == 'INGRESO' %}<span class="badge bg-success">Ingreso</span>{% else %}<span class="badge bg-danger">Gasto</span>{% endif %}</td>
-                        <td>{{ item.total }} €</td>
+                        <td>{{ item.total|floatformat:2 }} €</td>
                     </tr>
                     {% empty %}
                     <tr>
@@ -99,7 +99,7 @@
                         <td>{{ mov.get_categoria_display }}</td>
                         <td>{{ mov.concepto }}</td>
                         <td class="{% if mov.tipo == 'INGRESO' %}text-success{% else %}text-danger{% endif %}">
-                            {% if mov.tipo == 'INGRESO' %}+{% else %}-{% endif %}{{ mov.importe }} €
+                            {% if mov.tipo == 'INGRESO' %}+{% else %}-{% endif %}{{ mov.importe|floatformat:2 }} €
                         </td>
                     </tr>
                     {% empty %}

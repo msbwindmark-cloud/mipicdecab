@@ -21,7 +21,7 @@ def residencia_list(request):
             Q(tipo__icontains=query) |
             Q(estado__icontains=query)
         )
-    paginator = Paginator(residencias, 5)
+    paginator = Paginator(residencias, request.GET.get("per_page", 5))
     page_obj = paginator.get_page(request.GET.get('page'))
 
     if request.htmx:

@@ -79,7 +79,7 @@ def caballo_list(request):
             Q(propietario__nombre__icontains=query) |
             Q(propietario__apellidos__icontains=query)
         )
-    paginator = Paginator(caballos, 5)
+    paginator = Paginator(caballos, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

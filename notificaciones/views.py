@@ -19,7 +19,7 @@ def notificacion_list(request):
             Q(mensaje__icontains=query) |
             Q(tipo__icontains=query)
         )
-    paginator = Paginator(notificaciones, 5)
+    paginator = Paginator(notificaciones, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

@@ -57,7 +57,7 @@
                         {% if evento.proxima_fecha %}
                         <small class="text-danger"><i class="fas fa-clock"></i> Próxima: {{ evento.proxima_fecha }}</small>
                         {% endif %}
-                        <br><small class="text-muted">Coste: {{ evento.coste }} €</small>
+                        <br><small class="text-muted">Coste: {{ evento.coste|floatformat:2 }} €</small>
                     </div>
                     {% empty %}
                     <p class="text-muted">Sin registros veterinarios</p>
@@ -84,7 +84,7 @@
                     {% if herraje.proximo_herraje %}
                     <small class="text-warning"><i class="fas fa-clock"></i> Próximo: {{ herraje.proximo_herraje }}</small>
                     {% endif %}
-                    <br><small class="text-muted">Coste: {{ herraje.coste }} €</small>
+                    <br><small class="text-muted">Coste: {{ herraje.coste|floatformat:2 }} €</small>
                 </div>
                 {% empty %}
                 <p class="text-muted">Sin registros de herrajes</p>

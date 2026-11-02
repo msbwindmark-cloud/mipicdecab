@@ -20,7 +20,7 @@ def tarea_list(request):
             Q(prioridad__icontains=query) |
             Q(estado__icontains=query)
         )
-    paginator = Paginator(tareas, 5)
+    paginator = Paginator(tareas, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

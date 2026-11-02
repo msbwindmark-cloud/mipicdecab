@@ -20,7 +20,7 @@ def alimentacion_list(request):
             Q(momento__icontains=query) |
             Q(notas__icontains=query)
         )
-    paginator = Paginator(registros, 5)
+    paginator = Paginator(registros, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

@@ -20,7 +20,7 @@ def transporte_list(request):
             Q(destino__icontains=query) |
             Q(transportista__icontains=query)
         )
-    paginator = Paginator(transportes, 5)
+    paginator = Paginator(transportes, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

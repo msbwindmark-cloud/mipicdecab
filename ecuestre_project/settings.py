@@ -98,6 +98,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 ROOT_URLCONF = 'ecuestre_project.urls'
@@ -186,3 +187,11 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('GMAIL_USER', default='TU_GMAIL_AQUI@gmail.com')
 EMAIL_HOST_PASSWORD = config('GMAIL_APP_PASSWORD', default='TU_APP_PASSWORD_AQUI')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Evita warnings de auto-created primary key en todos los modelos
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# LiveReload solo en desarrollo (debug)
+if DEBUG:
+    INSTALLED_APPS += ['livereload']
+    MIDDLEWARE += ['livereload.middleware.LiveReloadScript']

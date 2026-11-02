@@ -17,7 +17,7 @@ def encuesta_list(request):
             Q(tipo__icontains=query) |
             Q(descripcion__icontains=query)
         )
-    paginator = Paginator(encuestas, 5)
+    paginator = Paginator(encuestas, request.GET.get("per_page", 5))
     page_obj = paginator.get_page(request.GET.get('page'))
 
     if request.htmx:

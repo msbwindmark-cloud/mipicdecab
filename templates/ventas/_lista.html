@@ -16,8 +16,8 @@
             {% for v in page_obj %}
             <tr>
                 <td>{{ v.caballo.nombre }}</td>
-                <td class="fw-bold text-success">{{ v.precio_venta }} €</td>
-                <td>{{ v.precio_minimo|default:"-" }} €</td>
+                <td class="fw-bold text-success">{{ v.precio_venta|floatformat:2 }} €</td>
+                <td>{{ v.precio_minimo|default:"-"|floatformat:2 }} €</td>
                 <td>{{ v.fecha_publicacion }}</td>
                 <td>{{ v.dias_en_venta }} días</td>
                 <td>{{ v.comprador|default:"-" }}</td>
@@ -46,13 +46,13 @@
     <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.previous_page_number }}" hx-target="#lista-ventas" hx-push-url="true">Anterior</a>
+            <a class="page-link" href="?q={{ query }}&per_page={{ request.GET.per_page|default:5 }}&page={{ page_obj.previous_page_number }}" hx-get="?q={{ query }}&per_page={{ request.GET.per_page|default:5 }}&page={{ page_obj.previous_page_number }}" hx-target="#lista-ventas" hx-push-url="true">Anterior</a>
         </li>
         {% endif %}
         <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
         {% if page_obj.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-get="?q={{ query }}&page={{ page_obj.next_page_number }}" hx-target="#lista-ventas" hx-push-url="true">Siguiente</a>
+            <a class="page-link" href="?q={{ query }}&per_page={{ request.GET.per_page|default:5 }}&page={{ page_obj.next_page_number }}" hx-get="?q={{ query }}&per_page={{ request.GET.per_page|default:5 }}&page={{ page_obj.next_page_number }}" hx-target="#lista-ventas" hx-push-url="true">Siguiente</a>
         </li>
         {% endif %}
     </ul>

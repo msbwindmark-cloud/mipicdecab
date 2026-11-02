@@ -17,7 +17,7 @@
                     <input type="range" class="form-range" min="0" max="64" step="1" id="caballos" value="{{ num_caballos }}" oninput="actualizar()">
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">Precio medio pupilaje (€/mes por caballo): <strong id="val-pup">{{ precio_pupilaje }} €</strong></label>
+                    <label class="form-label">Precio medio pupilaje (€/mes por caballo): <strong id="val-pup">{{ precio_pupilaje|floatformat:2 }} €</strong></label>
                     <input type="range" class="form-range" min="0" max="1000" step="5" id="precio_pupilaje" value="{{ precio_pupilaje }}" oninput="actualizar()">
                 </div>
                 <div class="mb-4">
@@ -25,11 +25,11 @@
                     <input type="range" class="form-range" min="0" max="200" step="1" id="num_entrenamientos" value="{{ num_entrenamientos }}" oninput="actualizar()">
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">Precio medio entrenamiento (€/sesión): <strong id="val-precioEnt">{{ precio_entrenamiento }} €</strong></label>
+                    <label class="form-label">Precio medio entrenamiento (€/sesión): <strong id="val-precioEnt">{{ precio_entrenamiento|floatformat:2 }} €</strong></label>
                     <input type="range" class="form-range" min="0" max="200" step="5" id="precio_entrenamiento" value="{{ precio_entrenamiento }}" oninput="actualizar()">
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">Costes fijos mensuales (€): <strong id="val-costes">{{ costes_fijos }} €</strong></label>
+                    <label class="form-label">Costes fijos mensuales (€): <strong id="val-costes">{{ costes_fijos|floatformat:2 }} €</strong></label>
                     <input type="range" class="form-range" min="0" max="50000" step="500" id="costes_fijos" value="{{ costes_fijos }}" oninput="actualizar()">
                 </div>
             </div>
@@ -81,14 +81,14 @@ function actualizar() {
     const margen = ingresos > 0 ? (beneficio / ingresos) * 100 : 0;
 
     document.getElementById('val-caballos').innerText = caballos;
-    document.getElementById('val-pup').innerText = pup + ' €';
+    document.getElementById('val-pup').innerText = pup.toFixed(2) + ' €';
     document.getElementById('val-entren').innerText = entren;
-    document.getElementById('val-precioEnt').innerText = precioEnt + ' €';
-    document.getElementById('val-costes').innerText = costes + ' €';
+    document.getElementById('val-precioEnt').innerText = precioEnt.toFixed(2) + ' €';
+    document.getElementById('val-costes').innerText = costes.toFixed(2) + ' €';
 
-    document.getElementById('out-ingresos').innerText = ingresos + ' €';
-    document.getElementById('out-gastos').innerText = gastos + ' €';
-    document.getElementById('out-beneficio').innerText = beneficio + ' €';
+    document.getElementById('out-ingresos').innerText = ingresos.toFixed(2) + ' €';
+    document.getElementById('out-gastos').innerText = gastos.toFixed(2) + ' €';
+    document.getElementById('out-beneficio').innerText = beneficio.toFixed(2) + ' €';
     document.getElementById('out-margen').innerText = margen.toFixed(1) + '%';
 
     if (window.miGrafico) {

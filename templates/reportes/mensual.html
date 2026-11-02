@@ -21,7 +21,7 @@
         <div class="card text-bg-primary">
             <div class="card-body">
                 <h6 class="card-title">Facturado</h6>
-                <h3>{{ facturado }} €</h3>
+                <h3>{{ facturado|floatformat:2 }} €</h3>
                 <small>{{ num_facturas }} facturas</small>
             </div>
         </div>
@@ -30,7 +30,7 @@
         <div class="card text-bg-success">
             <div class="card-body">
                 <h6 class="card-title">Cobrado</h6>
-                <h3>{{ cobrado }} €</h3>
+                <h3>{{ cobrado|floatformat:2 }} €</h3>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
         <div class="card text-bg-warning">
             <div class="card-body">
                 <h6 class="card-title">Pendiente</h6>
-                <h3>{{ pendiente }} €</h3>
+                <h3>{{ pendiente|floatformat:2 }} €</h3>
             </div>
         </div>
     </div>
@@ -46,8 +46,8 @@
         <div class="card text-bg-info">
             <div class="card-body">
                 <h6 class="card-title">Saldo Caja</h6>
-                <h3>{{ saldo }} €</h3>
-                <small>Ingresos: {{ ingresos }}€ | Gastos: {{ gastos }}€</small>
+                <h3>{{ saldo|floatformat:2 }} €</h3>
+                <small>Ingresos: {{ ingresos|floatformat:2 }}€ | Gastos: {{ gastos|floatformat:2 }}€</small>
             </div>
         </div>
     </div>
@@ -75,15 +75,15 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         <span>Total facturado</span>
-                        <strong>{{ facturado }} €</strong>
+                        <strong>{{ facturado|floatformat:2 }} €</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         <span>Total cobrado</span>
-                        <strong class="text-success">{{ cobrado }} €</strong>
+                        <strong class="text-success">{{ cobrado|floatformat:2 }} €</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         <span>Total pendiente</span>
-                        <strong class="text-danger">{{ pendiente }} €</strong>
+                        <strong class="text-danger">{{ pendiente|floatformat:2 }} €</strong>
                     </li>
                 </ul>
             </div>

@@ -19,7 +19,7 @@ def desparasitacion_list(request):
             Q(producto__icontains=query) |
             Q(tipo__icontains=query)
         )
-    paginator = Paginator(planes, 5)
+    paginator = Paginator(planes, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

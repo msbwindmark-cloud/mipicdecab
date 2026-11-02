@@ -81,7 +81,7 @@
                             <tr>
                                 <td>{{ factura.numero_factura }}</td>
                                 <td>{{ factura.fecha_emision }}</td>
-                                <td>{{ factura.total }} €</td>
+                                <td>{{ factura.total|floatformat:2 }} €</td>
                                 <td>
                                     {% if factura.estado == 'PAGADO' %}<span class="badge bg-success">Pagado</span>
                                     {% elif factura.estado == 'PENDIENTE' %}<span class="badge bg-warning text-dark">Pendiente</span>

@@ -17,7 +17,7 @@ def fidelizacion_list(request):
             Q(propietario__nombre__icontains=query) |
             Q(propietario__apellidos__icontains=query)
         )
-    paginator = Paginator(puntos, 5)
+    paginator = Paginator(puntos, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
@@ -43,7 +43,7 @@ class RecompensaForm(forms.ModelForm):
 @login_required
 def recompensa_list(request):
     recompensas = Recompensa.objects.order_by('-id')
-    paginator = Paginator(recompensas, 5)
+    paginator = Paginator(recompensas, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'fidelizacion/recompensas.html', {'page_obj': page_obj, 'recompensas': recompensas})
@@ -119,7 +119,7 @@ class MovimientoPuntosForm(forms.ModelForm):
 @login_required
 def movimiento_list(request):
     movimientos = MovimientoPuntos.objects.select_related('propietario').order_by('-id')
-    paginator = Paginator(movimientos, 5)
+    paginator = Paginator(movimientos, request.GET.get("per_page", 5))
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'fidelizacion/movimientos.html', {'page_obj': page_obj, 'movimientos': movimientos})
